@@ -16,7 +16,7 @@ $loader->registerNamespaces(array(
 	/**
 	 * Load common classes
 	 */
-	'Kur\Common\Events' => APP_PATH . '/common/events/',
+	'Siakad\Common\Events' => APP_PATH . '/common/events/',
 ), true);
 
 

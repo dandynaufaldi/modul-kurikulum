@@ -1,6 +1,6 @@
 <?php
 
-namespace Kur\Common\Events;
+namespace Siakad\Common\Events;
 
 class DomainEventPublisher
 {

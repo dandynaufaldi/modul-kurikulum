@@ -1,6 +1,6 @@
 <?php
 
-namespace Kur\Kurikulum;
+namespace Siakad\Kurikulum;
 
 use Phalcon\DiInterface;
 use Phalcon\Loader;
@@ -13,12 +13,12 @@ class Module implements ModuleDefinitionInterface
         $loader = new Loader();
 
         $loader->registerNamespaces([
-            'Kur\Kurikulum\Domain\Model' => __DIR__ . '/domain/model',
-            'Kur\Kurikulum\Infrastructure' => __DIR__ . '/infrastructure',
-            'Kur\Kurikulum\Application' => __DIR__ . '/application',
-            'Kur\Kurikulum\Controllers\Web' => __DIR__ . '/controllers/web',
-            'Kur\Kurikulum\Controllers\Api' => __DIR__ . '/controllers/api',
-            'Kur\Kurikulum\Controllers\Validators' => __DIR__ . '/controllers/validators',
+            'Siakad\Kurikulum\Domain\Model' => __DIR__ . '/domain/model',
+            'Siakad\Kurikulum\Infrastructure' => __DIR__ . '/infrastructure',
+            'Siakad\Kurikulum\Application' => __DIR__ . '/application',
+            'Siakad\Kurikulum\Controllers\Web' => __DIR__ . '/controllers/web',
+            'Siakad\Kurikulum\Controllers\Api' => __DIR__ . '/controllers/api',
+            'Siakad\Kurikulum\Controllers\Validators' => __DIR__ . '/controllers/validators',
         ]);
 
         $loader->register();
