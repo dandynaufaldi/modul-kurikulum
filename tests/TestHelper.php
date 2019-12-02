@@ -20,6 +20,7 @@ $loader = new Loader();
 
 $loader->registerNamespaces([
 //  Register namespaces
+    'Siakad\Kurikulum\Domain\Model' => APP_PATH . '/modules/kurikulum/domain/model'
 ]);
 
 $loader->register();
