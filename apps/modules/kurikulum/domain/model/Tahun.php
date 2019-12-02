@@ -2,8 +2,6 @@
 
 namespace Siakad\Kurikulum\Domain\Model;
 
-use DateTime;
-
 class Tahun
 {
     private $tahun;
