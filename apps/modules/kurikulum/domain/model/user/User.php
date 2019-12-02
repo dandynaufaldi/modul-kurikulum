@@ -7,7 +7,7 @@ class User
     private $id;
     private $identifier;
     private $name;
-    private $level;
+    private $userRole;
 
     public static $LEVEL_KAPRODI = 5;
     public static $LEVEL_DOSEN = 3;
@@ -17,13 +17,18 @@ class User
         int $id,
         string $identifier,
         string $name,
-        int $level
+        UserRole $userRole
     )
     {
         $this->id = $id;
         $this->identifier = $identifier;
         $this->name = $name;
-        $this->level = $level;
+        $this->userRole = $userRole;
+    }
+
+    public function isAllowed(UserRole $minLevel)
+    {
+        return $this->userRole->isAllowed($minLevel);
     }
 
     public function id()
