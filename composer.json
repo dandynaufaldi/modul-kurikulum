@@ -5,6 +5,7 @@
     },
     "require-dev": {
         "phalcon/ide-stubs": "^3.4",
-        "phalcon/dd": "^1.1"
+        "phalcon/dd": "^1.1",
+        "phpunit/phpunit": "8"
     }
 }

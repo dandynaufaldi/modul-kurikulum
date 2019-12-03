@@ -3,7 +3,6 @@
 use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Loader;
-use Phalcon\Events\Manager as EventsManager;
 
 ini_set("display_errors", 1);
 error_reporting(E_ALL);
@@ -19,8 +18,8 @@ include __DIR__ . "/../vendor/autoload.php";
 $loader = new Loader();
 
 $loader->registerNamespaces([
-//  Register namespaces
-    'Siakad\Kurikulum\Domain\Model' => APP_PATH . '/modules/kurikulum/domain/model'
+    'Siakad\Kurikulum\Domain\Model' => APP_PATH . '/modules/kurikulum/domain/model',
+    'Siakad\Kurikulum\Infrastructure' => APP_PATH . '/modules/kurikulum/infrastructure',
 ]);
 
 $loader->register();
