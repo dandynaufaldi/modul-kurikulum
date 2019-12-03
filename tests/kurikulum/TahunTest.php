@@ -31,4 +31,14 @@ class TahunTest extends TestCase
         $this->assertTrue($tahun3->isGreater($tahun2));
         $this->assertFalse($tahun1->isGreater($tahun2));
     }
+
+    public function testNowStatic() : void
+    {
+        $sekarang = Tahun::now();
+        $sekarangDateTime = new DateTime('now');
+        $sekarangYear = intval($sekarangDateTime->format('Y'));
+        $sekarangTahun = new Tahun($sekarangYear);
+
+        $this->assertEquals($sekarang, $sekarangTahun);
+    }
 }
