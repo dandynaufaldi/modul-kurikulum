@@ -39,4 +39,9 @@ class UserRole
     {
         return $this->level;
     }
+
+    public static function make(int $level) : UserRole
+    {
+        return new UserRole($level);
+    }
 }
