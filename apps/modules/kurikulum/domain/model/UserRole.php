@@ -15,7 +15,7 @@ class UserRole
     public function __construct(int $level)
     {
         if (!UserRole::validate($level)) {
-            throw new InvalidArgumentException("Invalid user role level");
+            throw new UnrecognizedUserRoleLevelException("Invalid user role level: {$level}");
         }
         $this->level = $level;
     }

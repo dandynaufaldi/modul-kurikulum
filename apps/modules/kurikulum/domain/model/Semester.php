@@ -16,7 +16,7 @@ class Semester
     {
         $semester = strtolower($semester);
         if (!Semester::validate($semester)) {
-            throw new InvalidArgumentException('Invalid semester value');
+            throw new UnrecognizedSemesterException('Invalid semester value');
         }
         $this->semester = $semester;
         $this->intValue = $this->semester === self::$genap ? 0 : 1;
