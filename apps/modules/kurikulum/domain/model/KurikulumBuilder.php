@@ -100,7 +100,7 @@ class KurikulumBuilder
             );
             return $kurikulum;
        } catch (TypeError $e) {
-           throw new InvalidArgumentException('Missing step in building object');
+           throw new MissingBuilderStepException('Missing step in building Kurikulum object');
        }
     }
 }
