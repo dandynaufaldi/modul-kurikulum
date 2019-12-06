@@ -5,7 +5,7 @@ use \PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Siakad\Kurikulum\Domain\Model\KurikulumId;
 
-class IdeaIdTest extends TestCase
+class KurikulumIdTest extends TestCase
 {
     public function testCanBeInstantiated() : void
     {

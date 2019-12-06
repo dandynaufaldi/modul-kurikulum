@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use \PHPUnit\Framework\TestCase;
 use Siakad\Kurikulum\Domain\Model\Semester;
+use Siakad\Kurikulum\Domain\Model\UnrecognizedSemesterException;
 
 class SemesterTest extends TestCase
 {
@@ -27,7 +28,7 @@ class SemesterTest extends TestCase
 
     public function testInvalidArgument()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(UnrecognizedSemesterException::class);
         
         $semester = new Semester('1');
     }
