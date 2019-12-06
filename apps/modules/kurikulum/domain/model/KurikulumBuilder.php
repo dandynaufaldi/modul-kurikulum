@@ -21,6 +21,7 @@ class KurikulumBuilder
     public function __construct()
     {
         $this->aktif = false;
+        $this->id = new KurikulumId();
     }
 
     public function id(KurikulumId $id)
