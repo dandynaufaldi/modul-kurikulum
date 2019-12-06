@@ -2,6 +2,7 @@
 
 use Siakad\Kurikulum\Domain\Model\UserRole;
 use PHPUnit\Framework\TestCase;
+use Siakad\Kurikulum\Domain\Model\UnrecognizedUserRoleLevelException;
 
 class UserRoleTest extends TestCase
 {
@@ -15,7 +16,7 @@ class UserRoleTest extends TestCase
 
     public function testCannotBeInstantiatedFromInvalidLevel() : void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(UnrecognizedUserRoleLevelException::class);
 
         $allowedLevel = [
             UserRole::$LEVEL_MAHASISWA,
