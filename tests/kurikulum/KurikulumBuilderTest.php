@@ -5,6 +5,7 @@ use PHPUnit\Framework\TestCase;
 use Siakad\Kurikulum\Domain\Model\Kurikulum;
 use Siakad\Kurikulum\Domain\Model\KurikulumBuilder;
 use Siakad\Kurikulum\Domain\Model\KurikulumId;
+use Siakad\Kurikulum\Domain\Model\MissingBuilderStepException;
 use Siakad\Kurikulum\Domain\Model\NamaBilingual;
 use Siakad\Kurikulum\Domain\Model\PeriodeTahun;
 use Siakad\Kurikulum\Domain\Model\ProgramStudi;
@@ -67,7 +68,7 @@ class KurikulumBuilderTest extends TestCase
 
     public function testCantBuildKurikulumWithMissingStep() : void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(MissingBuilderStepException::class);
 
         $builder = Kurikulum::builder();
         $kurikulum = $builder

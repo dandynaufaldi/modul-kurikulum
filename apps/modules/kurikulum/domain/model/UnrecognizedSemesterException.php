@@ -2,4 +2,6 @@
 
 namespace Siakad\Kurikulum\Domain\Model;
 
-class UnrecognizedSemesterException extends UnrecognizedSemesterException{}
+use Exception;
+
+class UnrecognizedSemesterException extends Exception{}
