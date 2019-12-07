@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use Siakad\Kurikulum\Application\CreateKurikulumRequest;
-use Siakad\Kurikulum\Application\CreateKurikulumService;
+use Siakad\Kurikulum\Application\KelolaKurikulumRequest;
+use Siakad\Kurikulum\Application\KelolaKurikulumService;
 use Siakad\Kurikulum\Application\ProgramStudiNotFoundException;
 use Siakad\Kurikulum\Domain\Model\KurikulumRepository;
 use Siakad\Kurikulum\Domain\Model\NamaBilingual;
@@ -13,7 +13,7 @@ use Siakad\Kurikulum\Domain\Model\UnrecognizedSemesterException;
 use Siakad\Kurikulum\Domain\Model\User;
 use Siakad\Kurikulum\Domain\Model\UserRole;
 
-class CreateKurikulumServiceTest extends TestCase
+class KelolaKurikulumServiceTest extends TestCase
 {
     protected $programStudiRepository;
     protected $kurikulumRepository;
@@ -34,9 +34,9 @@ class CreateKurikulumServiceTest extends TestCase
         );
     }
 
-    protected function createRequest() : CreateKurikulumRequest
+    protected function createRequest() : KelolaKurikulumRequest
     {
-        return new CreateKurikulumRequest(
+        return new KelolaKurikulumRequest(
             $this->programStudi->kode(),
             $this->programStudi->nama()->indonesia(),
             $this->programStudi->nama()->inggris(),
@@ -50,9 +50,9 @@ class CreateKurikulumServiceTest extends TestCase
         );
     }
 
-    protected function createRequestInvalidPeriode() : CreateKurikulumRequest
+    protected function createRequestInvalidPeriode() : KelolaKurikulumRequest
     {
-        return new CreateKurikulumRequest(
+        return new KelolaKurikulumRequest(
             $this->programStudi->kode(),
             $this->programStudi->nama()->indonesia(),
             $this->programStudi->nama()->inggris(),
@@ -66,9 +66,9 @@ class CreateKurikulumServiceTest extends TestCase
         );
     }
 
-    protected function createRequestInvalidSemesterMulai() : CreateKurikulumRequest
+    protected function createRequestInvalidSemesterMulai() : KelolaKurikulumRequest
     {
-        return new CreateKurikulumRequest(
+        return new KelolaKurikulumRequest(
             $this->programStudi->kode(),
             $this->programStudi->nama()->indonesia(),
             $this->programStudi->nama()->inggris(),
@@ -84,12 +84,12 @@ class CreateKurikulumServiceTest extends TestCase
 
     public function testCanBeInstantiated() : void
     {
-        $service = new CreateKurikulumService(
+        $service = new KelolaKurikulumService(
             $this->programStudiRepository,
             $this->kurikulumRepository
         );
 
-        $this->assertInstanceOf(CreateKurikulumService::class, $service);
+        $this->assertInstanceOf(KelolaKurikulumService::class, $service);
     }
 
     public function testCanExecute() : void
@@ -102,7 +102,7 @@ class CreateKurikulumServiceTest extends TestCase
                                   ->method('save')
                                   ->with($this->anything());
         $request = $this->createRequest();
-        $service = new CreateKurikulumService(
+        $service = new KelolaKurikulumService(
             $this->programStudiRepository,
             $this->kurikulumRepository
         );
@@ -117,7 +117,7 @@ class CreateKurikulumServiceTest extends TestCase
                                   ->method('save')
                                   ->with($this->anything());
         $request = $this->createRequest();
-        $service = new CreateKurikulumService(
+        $service = new KelolaKurikulumService(
             $this->programStudiRepository,
             $this->kurikulumRepository
         );
@@ -136,7 +136,7 @@ class CreateKurikulumServiceTest extends TestCase
                                   ->method('save')
                                   ->with($this->anything());
         $request = $this->createRequestInvalidPeriode();
-        $service = new CreateKurikulumService(
+        $service = new KelolaKurikulumService(
             $this->programStudiRepository,
             $this->kurikulumRepository
         );
@@ -155,7 +155,7 @@ class CreateKurikulumServiceTest extends TestCase
                                   ->method('save')
                                   ->with($this->anything());
         $request = $this->createRequestInvalidSemesterMulai();
-        $service = new CreateKurikulumService(
+        $service = new KelolaKurikulumService(
             $this->programStudiRepository,
             $this->kurikulumRepository
         );

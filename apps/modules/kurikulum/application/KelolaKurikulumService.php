@@ -10,7 +10,7 @@ use Siakad\Kurikulum\Domain\Model\ProgramStudiRepository;
 use Siakad\Kurikulum\Domain\Model\Semester;
 use Siakad\Kurikulum\Domain\Model\Tahun;
 
-class CreateKurikulumService
+class KelolaKurikulumService
 {
     private $programStudiRepository;
     private $kurikulumRepository;
@@ -24,7 +24,7 @@ class CreateKurikulumService
         $this->kurikulumRepository = $kurikulumRepository;
     }
 
-    public function execute(CreateKurikulumRequest $request)
+    public function execute(KelolaKurikulumRequest $request)
     {
         $programStudi = $this->programStudiRepository->byKode($request->kodeProgramStudi);
         if (empty($programStudi)) {
@@ -40,6 +40,7 @@ class CreateKurikulumService
         );
         $semesterMulai = new Semester($request->semesterMulai);
         $kurikulum = Kurikulum::builder()
+                              ->id($request->id)
                               ->prodi($programStudi)
                               ->nama($nama)
                               ->periode($periode)
@@ -48,6 +49,7 @@ class CreateKurikulumService
                               ->sksWajib($request->sksWajib)
                               ->sksPilihan($request->sksPilihan)
                               ->semesterNormal($request->semesterNormal)
+                              ->aktif($request->aktif)
                               ->build();
         $this->kurikulumRepository->save($kurikulum);
     }

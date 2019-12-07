@@ -2,7 +2,9 @@
 
 namespace Siakad\Kurikulum\Application;
 
-class CreateKurikulumRequest
+use Siakad\Kurikulum\Domain\Model\KurikulumId;
+
+class KelolaKurikulumRequest
 {
     public $kodeProgramStudi;
     public $namaIndonesia;
@@ -14,6 +16,8 @@ class CreateKurikulumRequest
     public $tahunMulai;
     public $tahunSelesai;
     public $semesterMulai;
+    public $aktif;
+    public $id;
 
     public function __construct(
         string $kodeProgramStudi,
@@ -25,7 +29,9 @@ class CreateKurikulumRequest
         int $semesterNormal,
         int $tahunMulai,
         int $tahunSelesai,
-        string $semesterMulai
+        string $semesterMulai,
+        bool $aktif = false,
+        string $id = null
     )
     {
         $this->kodeProgramStudi = $kodeProgramStudi;
@@ -38,5 +44,7 @@ class CreateKurikulumRequest
         $this->tahunMulai = $tahunMulai;
         $this->tahunSelesai = $tahunSelesai;
         $this->semesterMulai = $semesterMulai;
+        $this->aktif = $aktif;
+        $this->id = new KurikulumId($id);
     }
 }
