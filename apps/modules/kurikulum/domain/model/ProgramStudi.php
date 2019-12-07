@@ -24,17 +24,17 @@ class ProgramStudi
         $this->nama = $nama;
     }
 
-    public function kaprodi()
+    public function kaprodi() : User
     {
         return $this->kaprodi;
     }
 
-    public function kode()
+    public function kode() : string
     {
         return $this->kode;
     }
 
-    public function nama()
+    public function nama() : NamaBilingual
     {
         return $this->nama;
     }
