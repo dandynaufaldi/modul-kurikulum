@@ -2,8 +2,6 @@
 
 namespace Siakad\Kurikulum\Domain\Model;
 
-use InvalidArgumentException;
-
 class UserRole
 {
     public static $LEVEL_KAPRODI = 5;

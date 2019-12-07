@@ -2,8 +2,6 @@
 
 namespace Siakad\Kurikulum\Domain\Model;
 
-use InvalidArgumentException;
-
 class Semester
 {
     public static $genap = 'genap';

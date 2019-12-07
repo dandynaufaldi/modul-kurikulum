@@ -7,47 +7,43 @@ class User
     private $id;
     private $identifier;
     private $name;
-    private $userRole;
-
-    public static $LEVEL_KAPRODI = 5;
-    public static $LEVEL_DOSEN = 3;
-    public static $LEVEL_MAHASISWA = 1;
+    private $role;
 
     public function __construct(
         int $id,
         string $identifier,
         string $name,
-        UserRole $userRole
+        UserRole $role
     )
     {
         $this->id = $id;
         $this->identifier = $identifier;
         $this->name = $name;
-        $this->userRole = $userRole;
+        $this->role = $role;
     }
 
     public function isAllowed(UserRole $minLevel)
     {
-        return $this->userRole->isAllowed($minLevel);
+        return $this->role->isAllowed($minLevel);
     }
 
-    public function id()
+    public function id() : int
     {
         return $this->id;
     }
 
-    public function identifier()
+    public function identifier() : string
     {
         return $this->identifier;
     }
 
-    public function name()
+    public function name() : string
     {
         return $this->name;
     }
 
-    public function level()
+    public function role() : UserRole
     {
-        return $this->level;
+        return $this->role;
     }
 }

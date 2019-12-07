@@ -61,6 +61,11 @@ class Kurikulum
         return new KurikulumBuilder();
     }
 
+    public function getId() : KurikulumId
+    {
+        return $this->id;
+    }
+
     public function getProdi() : ProgramStudi
     {
         return $this->prodi;
@@ -163,4 +168,6 @@ class Kurikulum
         $this->periode = $periode;
         return $this;
     }
+
+    // public function
 }
