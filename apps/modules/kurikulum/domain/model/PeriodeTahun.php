@@ -29,12 +29,12 @@ class PeriodeTahun
         return $selesai->isGreater($mulai);
     }
 
-    public function mulai()
+    public function mulai() : Tahun
     {
         return $this->mulai;
     }
 
-    public function selesai()
+    public function selesai() : Tahun
     {
         return $this->selesai;
     }

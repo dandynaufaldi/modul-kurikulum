@@ -44,7 +44,8 @@ class CreateKurikulumService
                               ->nama($nama)
                               ->periode($periode)
                               ->semesterMulai($semesterMulai)
-                              ->sksLulus($request->sksLulus)->sksWajib($request->sksWajib)
+                              ->sksLulus($request->sksLulus)
+                              ->sksWajib($request->sksWajib)
                               ->sksPilihan($request->sksPilihan)
                               ->semesterNormal($request->semesterNormal)
                               ->build();
