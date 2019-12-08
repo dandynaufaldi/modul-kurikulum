@@ -192,6 +192,7 @@ DROP TABLE IF EXISTS `prodi`;
 CREATE TABLE `prodi` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_kaprodi` int(11) NOT NULL,
+  `kode` varchar(10) NOT NULL UNIQUE,
   `nama` varchar(100) NOT NULL,
   `nama_inggris` varchar(100) NOT NULL,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -209,7 +210,7 @@ CREATE TABLE `prodi` (
 
 LOCK TABLES `prodi` WRITE;
 /*!40000 ALTER TABLE `prodi` DISABLE KEYS */;
-INSERT INTO `prodi` VALUES (1,1,'S1 Informatika','Bachelor Degree of Informatics','2019-12-08 09:58:16','2019-12-08 09:58:16',NULL);
+INSERT INTO `prodi` VALUES (1,1, '511', 'S1 Informatika','Bachelor Degree of Informatics','2019-12-08 09:58:16','2019-12-08 09:58:16',NULL);
 /*!40000 ALTER TABLE `prodi` ENABLE KEYS */;
 UNLOCK TABLES;
 
