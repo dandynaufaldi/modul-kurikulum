@@ -22,3 +22,10 @@ $router->add('/kurikulum/{id}/edit', [
     'controller' => 'kurikulum',
     'action' => 'edit'
 ]);
+
+$router->addPost('/kurikulum/{id}/delete', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'kurikulum',
+    'action' => 'delete'
+]);

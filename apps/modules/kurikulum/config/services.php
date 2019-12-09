@@ -2,6 +2,10 @@
 
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
+use Siakad\Kurikulum\Application\HapusKurikulumService;
+use Siakad\Kurikulum\Application\KelolaKurikulumService;
+use Siakad\Kurikulum\Application\LihatDaftarKurikulumService;
+use Siakad\Kurikulum\Application\LihatFormKurikulumService;
 use Siakad\Kurikulum\Infrastructure\SqlKurikulumRepository;
 use Siakad\Kurikulum\Infrastructure\SqlProgramStudiRepository;
 
@@ -59,4 +63,36 @@ $di->setShared('sql_kurikulum_repository', function() use ($di) {
 $di->setShared('sql_prodi_repository', function() use ($di) {
     $repo = new SqlProgramStudiRepository($di);
     return $repo;
+});
+
+$di->set('daftar_kurikulum_service', function() use ($di) {
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    return new LihatDaftarKurikulumService(
+        $kurikulumRepository
+    );
+});
+
+$di->set('kelola_kurikulum_service', function() use ($di) {
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    $programStudiRepository = $di->get('sql_prodi_repository');
+    return new KelolaKurikulumService(
+        $programStudiRepository,
+        $kurikulumRepository
+    );
+});
+
+$di->set('form_kurikulum_service', function() use ($di) {
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    $programStudiRepository = $di->get('sql_prodi_repository');
+    return new LihatFormKurikulumService(
+        $kurikulumRepository,
+        $programStudiRepository
+    );
+});
+
+$di->set('hapus_kurikulum_service', function() use ($di) {
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    return new HapusKurikulumService(
+        $kurikulumRepository
+    );
 });

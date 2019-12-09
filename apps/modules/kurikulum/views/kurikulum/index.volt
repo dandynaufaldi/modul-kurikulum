@@ -39,8 +39,8 @@
                 <a href="{{ url('kurikulum/' ~ kurikulum.id ~'/edit') }}" class="btn btn-info btn-sm" role="button">Edit</a>
             </div>
             <div class="pull-right">
-                {{ form('kurikulum/' ~ kurikulum.id ~ '/delete', 'method': 'POST', 'onsubmit' : "return confirm('Apakah yakin untuk menghapus data?')")}}
-                    {{ hidden_field('kurikulum_id', 'value': kurikulum.id ) }}
+                {{ form('kurikulum/' ~ kurikulum.id ~ '/delete', 'method': 'POST', 'onsubmit' : "return confirm('Apakah yakin untuk menghapus " ~ kurikulum.namaIndonesia ~ "?')")}}
+                    {{ hidden_field('id', 'value': kurikulum.id ) }}
                     {{ submit_button('Hapus', 'type': 'button', 'class': 'btn btn-danger btn-sm') }}
                 {{ end_form() }}
             </div>
