@@ -7,8 +7,8 @@ return array(
         'apiControllerNamespace' => 'Siakad\Kurikulum\Controllers\Api',
         'className' => 'Siakad\Kurikulum\Module',
         'path' => APP_PATH . '/modules/kurikulum/Module.php',
-        'defaultRouting' => true,
-        'defaultController' => 'idea',
+        'defaultRouting' => false,
+        'defaultController' => 'index',
         'defaultAction' => 'index'
     ],
 

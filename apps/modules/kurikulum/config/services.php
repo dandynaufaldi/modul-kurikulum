@@ -2,6 +2,8 @@
 
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
+use Siakad\Kurikulum\Infrastructure\SqlKurikulumRepository;
+use Siakad\Kurikulum\Infrastructure\SqlProgramStudiRepository;
 
 $di['voltServiceMail'] = function($view) use ($di) {
 
@@ -48,3 +50,13 @@ $di['db'] = function () use ($di) {
         "dbname" => $config->database->dbname
     ]);
 };
+
+$di->setShared('sql_kurikulum_repository', function() use ($di) {
+    $repo = new SqlKurikulumRepository($di);
+    return $repo;
+});
+
+$di->setShared('sql_prodi_repository', function() use ($di) {
+    $repo = new SqlProgramStudiRepository($di);
+    return $repo;
+});
