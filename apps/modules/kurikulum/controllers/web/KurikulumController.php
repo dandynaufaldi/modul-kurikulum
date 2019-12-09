@@ -19,7 +19,9 @@ class KurikulumController extends Controller
         $kurikulumRepository = $this->di->get('sql_kurikulum_repository');
         $service = new LihatDaftarKurikulumService($kurikulumRepository);
         $response = $service->execute();
-        dd($response->listKurikulum);
+        // dd($response->listKurikulum);
+        $this->view->listKurikulum = $response->listKurikulum;
+        return $this->view->pick('kurikulum/index');
     }
     
     public function addAction()

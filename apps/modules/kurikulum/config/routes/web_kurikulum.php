@@ -16,7 +16,7 @@ $router->add('/kurikulum/add', [
     'action' => 'add'
 ]);
 
-$router->add('/kurikulum/{id}', [
+$router->add('/kurikulum/{id}/edit', [
     'namespace' => $namespace,
     'module' => 'kurikulum',
     'controller' => 'kurikulum',

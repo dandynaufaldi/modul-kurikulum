@@ -98,6 +98,18 @@ class SqlProgramStudiRepository implements ProgramStudiRepository
 
     public function byKode(string $kode): ?ProgramStudi
     {
-        return null;
+        $statement = $this->statements[self::$byKode];
+        $type = $this->types[self::$byKode];
+        $params = [
+            'kode' => $kode
+        ];
+
+        $result = $this->db->executePrepared($statement, $params, $type);
+        if ($result->rowCount() == 0) {
+            return null;
+        }
+        
+        $programStudi = $this->arrayToEntity($result->fetch(PDO::FETCH_ASSOC));
+        return $programStudi;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Siakad\Kurikulum\Infrastructure;
 
+use Exception;
 use PDO;
 use Phalcon\Db\Column;
 use Siakad\Kurikulum\Domain\Model\Kurikulum;
@@ -19,6 +20,7 @@ class SqlKurikulumRepository implements KurikulumRepository
 {
     private static $byId = 'byId';
     private static $all = 'all';
+    private static $save = 'save';
     private static $insert = 'insert';
     private static $update = 'update';
     private static $delete = 'delete';
@@ -57,7 +59,7 @@ class SqlKurikulumRepository implements KurikulumRepository
             user.identifier AS user_identifier,
             user.level AS user_level
         FROM kurikulum 
-            JOIN prodi ON kurikulum.id_prodi = prodi.id 
+            JOIN prodi ON kurikulum.kode_prodi = prodi.kode 
             JOIN user ON user.id = prodi.id
         WHERE kurikulum.deleted_at IS NULL';
         
@@ -70,17 +72,17 @@ class SqlKurikulumRepository implements KurikulumRepository
             ),
             self::$insert => $this->db->prepare(
                 'INSERT INTO kurikulum
-                (id, id_prodi, aktif, nama, nama_inggris, 
+                (id, kode_prodi, aktif, nama, nama_inggris, 
                 sks_lulus, sks_wajib, sks_pilihan, semester_normal,
                 tahun_mulai, tahun_selesai, semester)
                 VALUES
-                (:id, :id_prodi, :aktif, :nama_indonesia, :nama_inggris, 
+                (:id, :kode_prodi, :aktif, :nama_indonesia, :nama_inggris, 
                 :sks_lulus, :sks_wajib, :sks_pilihan, :semester_normal,
                 :tahun_mulai, :tahun_selesai, :semester_mulai)'
             ),
             self::$update => $this->db->prepare(
                 'UPDATE kurikulum
-                SET id_prodi = :id_prodi, aktif = :aktif, nama = :nama_indonesia,
+                SET kode_prodi = :kode_prodi, aktif = :aktif, nama = :nama_indonesia,
                 nama_inggris = :nama_inggris, sks_lulus = :sks_lulus,
                 sks_wajib = :sks_wajib, sks_pilihan = :sks_pilihan, 
                 semester_normal = :semester_normal, tahun_mulai = :tahun_mulai,
@@ -99,7 +101,7 @@ class SqlKurikulumRepository implements KurikulumRepository
     {
         $allColumn = [
             'id' => Column::BIND_PARAM_STR,
-            'id_prodi' => Column::BIND_PARAM_INT,
+            'kode_prodi' => Column::BIND_PARAM_STR,
             'aktif' => Column::BIND_PARAM_BOOL,
             'nama_indonesia' => Column::BIND_PARAM_STR,
             'nama_inggris' => Column::BIND_PARAM_STR,
@@ -116,8 +118,7 @@ class SqlKurikulumRepository implements KurikulumRepository
             self::$byId => [
                 'id' => Column::BIND_PARAM_STR
             ],
-            self::$insert => $allColumn,
-            self::$update => $allColumn,
+            self::$save => $allColumn,
             self::$delete => [
                 'id' => Column::BIND_PARAM_STR
             ]
@@ -199,11 +200,43 @@ class SqlKurikulumRepository implements KurikulumRepository
 
     public function save(Kurikulum $kurikulum): void
     {
-        
+        $existing = $this->byId($kurikulum->getId());
+        if (empty($existing)) {
+            $statement = $this->statements[self::$insert];
+        } else {
+            $statement = $this->statements[self::$update];
+        }
+        $type = $this->types[self::$save];
+        $params = [
+            'id' => $kurikulum->getId()->id(),
+            'kode_prodi' => $kurikulum->getProdi()->kode(),
+            'aktif' => $kurikulum->getAktif(),
+            'nama_indonesia' => $kurikulum->getNama()->indonesia(),
+            'nama_inggris' => $kurikulum->getNama()->inggris(),
+            'sks_lulus' => $kurikulum->getSksLulus(),
+            'sks_wajib' => $kurikulum->getSksWajib(),
+            'sks_pilihan' => $kurikulum->getSksPilihan(),
+            'semester_normal'=> $kurikulum->getSemesterNormal(),
+            'tahun_mulai' => $kurikulum->getPeriode()->mulai()->tahun(),
+            'tahun_selesai' => $kurikulum->getPeriode()->selesai()->tahun(),
+            'semester_mulai' => $kurikulum->getSemesterMulai()->semester()
+        ];
+        $success = $this->db->executePrepared($statement, $params, $type);
+        if (!$success) {
+            throw new Exception('Failed to save kurikulum');
+        }
     }
 
     public function delete(KurikulumId $kurikulumId): void
     {
-        
+        $statement = $this->statements[self::$delete];
+        $type = $this->types[self::$delete];
+        $params = [
+            'id' => $kurikulumId->id()
+        ];
+        $success = $this->db->executePrepared($statement, $params, $type);
+        if (!$success) {
+            throw new Exception('Failed to delete kurikulum');
+        }
     }
 }
