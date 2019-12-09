@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `kurikulum`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `kurikulum` (
   `id` char(36) NOT NULL,
-  `id_prodi` int(11) NOT NULL,
+  `kode_prodi` varchar(10) NOT NULL,
   `aktif` tinyint(1) DEFAULT '0',
   `nama` varchar(100) NOT NULL,
   `nama_inggris` varchar(100) NOT NULL,
@@ -39,8 +39,8 @@ CREATE TABLE `kurikulum` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_prodi` (`id_prodi`),
-  CONSTRAINT `kurikulum_ibfk_1` FOREIGN KEY (`id_prodi`) REFERENCES `prodi` (`id`)
+  KEY `kode_prodi` (`kode_prodi`),
+  CONSTRAINT `kurikulum_ibfk_1` FOREIGN KEY (`kode_prodi`) REFERENCES `prodi` (`kode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -50,7 +50,7 @@ CREATE TABLE `kurikulum` (
 
 LOCK TABLES `kurikulum` WRITE;
 /*!40000 ALTER TABLE `kurikulum` DISABLE KEYS */;
-INSERT INTO `kurikulum` VALUES ('45cf2895-e52a-4afe-ba35-30f98f9aa5c7',1,0,'Kurikulum 2000 S1 Informatika','Curriculum 2000 Bachelor Degree of Informatics',144,120,24,8,2000,2004,'ganjil','2019-12-08 10:10:07','2019-12-08 10:10:07',NULL);
+INSERT INTO `kurikulum` VALUES ('45cf2895-e52a-4afe-ba35-30f98f9aa5c7','511',0,'Kurikulum 2000 S1 Informatika','Curriculum 2000 Bachelor Degree of Informatics',144,120,24,8,2000,2004,'ganjil','2019-12-08 10:10:07','2019-12-08 10:10:07',NULL);
 /*!40000 ALTER TABLE `kurikulum` ENABLE KEYS */;
 UNLOCK TABLES;
 
