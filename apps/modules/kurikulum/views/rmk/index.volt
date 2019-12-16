@@ -29,16 +29,16 @@
         <tbody>
         {% for rmk in listRMK %}
         <tr>
-            <td>{{ rmk['kode'] }}</td>
-            <td>{{ rmk['namaIndonesia'] }}</td>
-            <td>{{ rmk['namaKetua'] }}</td>
+            <td>{{ rmk.kode }}</td>
+            <td>{{ rmk.namaIndonesia }}</td>
+            <td>{{ rmk.ketua.nama }}</td>
             <td>
             <div class="pull-left">
-                <a href="{{ url('rmk/' ~ rmk['id'] ~'/edit') }}" class="btn btn-info btn-sm" role="button">Edit</a>
+                <a href="{{ url('rmk/' ~ rmk.id ~'/edit') }}" class="btn btn-info btn-sm" role="button">Edit</a>
             </div>
             <div class="pull-right">
-                {{ form('rmk/' ~ rmk['id'] ~ '/delete', 'method': 'POST', 'onsubmit' : "return confirm('Apakah yakin untuk menghapus " ~ rmk['namaIndonesia'] ~ "?')")}}
-                    {{ hidden_field('id', 'value': rmk['id'] ) }}
+                {{ form('rmk/' ~ rmk.id ~ '/delete', 'method': 'POST', 'onsubmit' : "return confirm('Apakah yakin untuk menghapus " ~ rmk.namaIndonesia ~ "?')")}}
+                    {{ hidden_field('id', 'value': rmk.id ) }}
                     {{ submit_button('Hapus', 'type': 'button', 'class': 'btn btn-danger btn-sm') }}
                 {{ end_form() }}
             </div>

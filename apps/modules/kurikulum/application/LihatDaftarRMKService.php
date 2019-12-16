@@ -19,16 +19,10 @@ class LihatDaftarRMKService
 
         $response = new LihatDaftarRMKResponse();
 
-        if ($listRMK) {
-            foreach ($listRMK as $row) {
-                $response->addRMKResponse(
-                    $row->id()->id(),
-                    $row->kode(),
-                    $row->nama()->indonesia(),
-                    $row->ketua()->name(),
-                );
-            }
+        foreach ($listRMK as $rmk) {
+            $response->addRMK($rmk);
         }
+
         return $response;
     }
 }

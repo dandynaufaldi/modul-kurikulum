@@ -48,7 +48,7 @@ class SqlRMKRepository implements RMKRepository
                 $queryAll
             ),
             self::$byKode => $this->db->prepare(
-                $queryAll . ' WHERE prodi.kode = :kode'
+                $queryAll . ' WHERE rmk.kode = :kode'
             ),
         ];
     }

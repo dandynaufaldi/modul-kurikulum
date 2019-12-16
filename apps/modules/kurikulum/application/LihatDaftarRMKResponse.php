@@ -2,6 +2,8 @@
 
 namespace Siakad\Kurikulum\Application;
 
+use Siakad\Kurikulum\Domain\Model\RMK;
+
 class LihatDaftarRMKResponse
 {
     public $listRMK;
@@ -11,20 +13,9 @@ class LihatDaftarRMKResponse
         $this->listRMK = array();
     }
 
-    public function addRMKResponse(
-        string $id,
-        string $kode,
-        string $namaIndonesia,
-        string $namaKetua
-    )
+    public function addRMK(RMK $rmk)
     {
-        $RMK = array(
-            'id' => $id,
-            'kode' => $kode,
-            'namaIndonesia' => $namaIndonesia,
-            'namaKetua' => $namaKetua,
-        );
-
-        array_push($this->listRMK, $RMK);
+        $viewModel = RMKViewModel::fromRMK($rmk);
+        $this->listRMK[] = $viewModel;
     }
 }
