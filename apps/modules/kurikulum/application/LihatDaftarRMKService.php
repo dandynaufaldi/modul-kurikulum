@@ -4,13 +4,11 @@ namespace Siakad\Kurikulum\Application;
 
 use Siakad\Kurikulum\Domain\Model\RMKRepository;
 
-class ViewRMKService
+class LihatDaftarRMKService
 {
     private $RMKRepository;
 
-    public function __construct(
-        RMKRepository $RMKRepository
-    )
+    public function __construct(RMKRepository $RMKRepository)
     {
         $this->RMKRepository = $RMKRepository;
     }
@@ -19,14 +17,15 @@ class ViewRMKService
     {
         $listRMK = $this->RMKRepository->all();
 
-        $response = new ViewRMKResponse();
+        $response = new LihatDaftarRMKResponse();
 
         if ($listRMK) {
             foreach ($listRMK as $row) {
                 $response->addRMKResponse(
+                    $row->id()->id(),
                     $row->kode(),
-                    $row->name(),
-                    $row->user()->name(),
+                    $row->nama()->indonesia(),
+                    $row->ketua()->name(),
                 );
             }
         }

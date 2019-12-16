@@ -2,7 +2,7 @@
 
 namespace Siakad\Kurikulum\Application;
 
-class ViewRMKResponse
+class LihatDaftarRMKResponse
 {
     public $listRMK;
 
@@ -12,14 +12,16 @@ class ViewRMKResponse
     }
 
     public function addRMKResponse(
+        string $id,
         string $kode,
-        string $name,
+        string $namaIndonesia,
         string $namaKetua
     )
     {
         $RMK = array(
+            'id' => $id,
             'kode' => $kode,
-            'name' => $name,
+            'namaIndonesia' => $namaIndonesia,
             'namaKetua' => $namaKetua,
         );
 
