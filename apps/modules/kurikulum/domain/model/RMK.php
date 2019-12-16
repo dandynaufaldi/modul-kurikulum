@@ -6,41 +6,42 @@ use Siakad\Kurikulum\Domain\Model\UserRepository;
 
 class RMK
 {
+    private $id;
     private $kode;
-    private $name;
+    private $nama;
     private $ketua;
 
     public function __construct(
+        RMKId $id,
         string $kode,
-        string $name,
+        NamaBilingual $nama,
         User $ketua
     )
     {
+        $this->id = $id;
         $this->kode = $kode;
-        $this->name = $name;
+        $this->nama = $nama;
         $this->ketua = $ketua;
     }
 
-    public function kode()
+    public function id() : RMKId
+    {
+        return $this->id;
+    }
+
+    public function kode() : string
     {
         return $this->kode;
     }
 
-    public function name()
+    public function nama() : NamaBilingual
     {
-        return $this->name;
+        return $this->nama;
     }
 
-    public function ketua()
+    public function ketua() : User
     {
         return $this->ketua;
-    }
-    
-    public static function makeRMK($kode, $name, $idKetua)
-    {   
-        $newRMK = new RMK($kode, $name, UserRepository::byId($idKetua));
-        
-        return $newRMK;
     }
 
 }
