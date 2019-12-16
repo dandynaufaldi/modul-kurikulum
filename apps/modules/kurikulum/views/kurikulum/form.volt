@@ -10,7 +10,6 @@
     <hr>
     <div class="row">
         <div class="col-md-5 pull-left">
-            {{ submit_button('Simpan', 'type': 'button', 'class': 'btn btn-primary btn-sm') }}
             <a href="{{ url('kurikulum/')}}" class="btn btn-secondary btn-sm" role="button">Kembali</a>
         </div>
     </div>
@@ -76,6 +75,7 @@
                     {% endfor %}
                 </select>
             </div>
+            {{ submit_button('Simpan', 'type': 'button', 'class': 'btn btn-primary btn-sm') }}
         </div>
     </div>
     {{ end_form() }}
