@@ -2,8 +2,6 @@
 
 namespace Siakad\Kurikulum\Domain\Model;
 
-use Siakad\Kurikulum\Domain\Model\UserRepository;
-
 class RMK
 {
     private $id;

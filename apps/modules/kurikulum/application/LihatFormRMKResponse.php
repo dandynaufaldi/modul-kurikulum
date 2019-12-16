@@ -2,7 +2,6 @@
 
 namespace Siakad\Kurikulum\Application;
 
-use Siakad\Kurikulum\Domain\Model\Kurikulum;
 use Siakad\Kurikulum\Domain\Model\RMK;
 use Siakad\Kurikulum\Domain\Model\User;
 
@@ -13,7 +12,6 @@ class LihatFormRMKResponse
 
     public function __construct(RMK $rmk = null)
     {
-        // $this->rmk = $rmk ? KurikulumViewModel::fromKurikulum($kurikulum) : $kurikulum;
         $this->listUser = array();
     }
 
