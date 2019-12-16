@@ -11,6 +11,7 @@ use Siakad\Kurikulum\Domain\Model\UserRole;
 class SqlUserRepository implements UserRepository
 {
     private static $byId = 'byId';
+    private static $byIdentifier = 'byIdentifier';
     // private static $byIdentifierAndPassword = 'byIdentifierAndPassword';
     private static $roleGreaterThanEqual = 'roleGreaterThanEqual';
 
@@ -38,6 +39,9 @@ class SqlUserRepository implements UserRepository
             self::$byId => $this->db->prepare(
                 $queryAll . ' WHERE user.id = :id'
             ),
+            self::$byIdentifier => $this->db->prepare(
+                $queryAll . ' WHERE user.identifier = :identifier'
+            ),
             self::$roleGreaterThanEqual => $this->db->prepare(
                 $queryAll . ' WHERE user.level >= :level'
             ),
@@ -49,6 +53,9 @@ class SqlUserRepository implements UserRepository
         $this->types = [
             self::$byId => [
                 'id' => Column::BIND_PARAM_INT
+            ],
+            self::$byIdentifier => [
+                'identifier' => Column::BIND_PARAM_STR
             ],
             self::$roleGreaterThanEqual => [
                 'level' => Column::BIND_PARAM_INT
@@ -72,6 +79,21 @@ class SqlUserRepository implements UserRepository
         $type = $this->types[self::$byId];
         $params = [
             'id' => $id
+        ];
+        $result = $this->db->executePrepared($statement, $params, $type);
+        if ($result->rowCount() == 0) {
+            return null;
+        }
+        $user = $this->arrayToEntity($result->fetch(PDO::FETCH_ASSOC));
+        return $user;
+    }
+
+    public function byIdentifier(string $identifier) : User
+    {
+        $statement = $this->statements[self::$byIdentifier];
+        $type = $this->types[self::$byIdentifier];
+        $params = [
+            'identifier' => $identifier
         ];
         $result = $this->db->executePrepared($statement, $params, $type);
         if ($result->rowCount() == 0) {
