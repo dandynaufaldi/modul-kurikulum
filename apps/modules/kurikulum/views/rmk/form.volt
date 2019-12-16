@@ -19,7 +19,7 @@
         <div class="col-md-6">    
             <div class='form-group'>
                 <label for='ketua-rmk'>Ketua RMK</label>
-                <select class="form-control" name="ketua" required>
+                <select class="form-control" name="ketua_identifier" required>
                     {% for user in listUser %}
                         <option value="{{ user.identifier }}">{{ user.nama }}</option>
                     {% endfor %}
