@@ -3,18 +3,20 @@
 {% block title %}Daftar Kurikulum{% endblock %}
 
 {% block assets %}
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 {% endblock %}
 
 {% block content %}
     {{ flashSession.output() }}
     <div class="row">
-        <div class="col-md-9 pull-left"><h2>Daftar Kurikulum</h2></div>
-        <div class="col-md-3 pull-right">
+        <div class="col-md-12 pull-left"><h2>Daftar Kurikulum</h2></div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-5 pull-left">
             <a href="{{ url('kurikulum/add') }}" class="btn btn-success btn-sm" role="button">Tambah Kurikulum</a>
         </div>
     </div>
-    
+    <br>
     <table id="daftar-kurikulum" class="table table-stdiped table-bordered" style="width:100%;">
         <thead>
             <tr>
@@ -53,8 +55,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(document).ready(function(){
     $('#daftar-kurikulum').DataTable({

@@ -4,6 +4,17 @@
 
 {% block content %}
     {{ flashSession.output() }}
+    <div class="row">
+        <div class="col-md-12 pull-left"><h2>Tambah Kurikulum</h2></div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-5 pull-left">
+            {{ submit_button('Simpan', 'type': 'button', 'class': 'btn btn-primary btn-sm') }}
+            <a href="{{ url('kurikulum/')}}" class="btn btn-secondary btn-sm" role="button">Kembali</a>
+        </div>
+    </div>
+    <br>
     {{ form(action, 'method': 'POST')}}
     <input type="hidden" class="form-control" id="id" name="id" {% if kurikulum %}value="{{ kurikulum.id }}"{% endif %}>
     <div class="row">
@@ -65,8 +76,6 @@
                     {% endfor %}
                 </select>
             </div>
-        {{ submit_button('Simpan', 'type': 'button', 'class': 'btn btn-primary') }}
-        <a href="{{ url('kurikulum/')}}" class="btn btn-secondary" role="button">Kembali</a>
         </div>
     </div>
     {{ end_form() }}
