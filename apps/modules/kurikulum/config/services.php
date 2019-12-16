@@ -7,6 +7,7 @@ use Siakad\Kurikulum\Application\KelolaKurikulumService;
 use Siakad\Kurikulum\Application\LihatDaftarKurikulumService;
 use Siakad\Kurikulum\Application\LihatDaftarRMKService;
 use Siakad\Kurikulum\Application\LihatFormKurikulumService;
+use Siakad\Kurikulum\Application\LihatFormRMKService;
 use Siakad\Kurikulum\Infrastructure\SqlKurikulumRepository;
 use Siakad\Kurikulum\Infrastructure\SqlProgramStudiRepository;
 use Siakad\Kurikulum\Infrastructure\SqlRMKRepository;
@@ -114,5 +115,16 @@ $di->set('daftar_rmk_service', function() use ($di) {
     $rmkRepository = $di->get('sql_rmk_repository');
     return new LihatDaftarRMKService(
         $rmkRepository
+    );
+});
+
+$di->set('form_rmk_service', function() use ($di) {
+    $rmkRepository = $di->get('sql_rmk_repository');
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    $userRepository = $di->get('sql_user_repository');
+    return new LihatFormRMKService(
+        $rmkRepository,
+        $kurikulumRepository,
+        $userRepository
     );
 });
