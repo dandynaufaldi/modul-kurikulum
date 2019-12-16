@@ -120,11 +120,9 @@ $di->set('daftar_rmk_service', function() use ($di) {
 
 $di->set('form_rmk_service', function() use ($di) {
     $rmkRepository = $di->get('sql_rmk_repository');
-    $kurikulumRepository = $di->get('sql_kurikulum_repository');
     $userRepository = $di->get('sql_user_repository');
     return new LihatFormRMKService(
         $rmkRepository,
-        $kurikulumRepository,
         $userRepository
     );
 });

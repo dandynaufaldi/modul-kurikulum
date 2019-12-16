@@ -285,7 +285,6 @@ DROP TABLE IF EXISTS `rmk`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rmk` (
   `id` char(36) NOT NULL,
-  `id_kurikulum` char(36) NOT NULL,
   `id_ketua` int(11) NOT NULL,
   `kode_rmk` varchar(10) NOT NULL,
   `nama` varchar(100) NOT NULL,
@@ -294,10 +293,8 @@ CREATE TABLE `rmk` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_kurikulum` (`id_kurikulum`),
   KEY `id_ketua` (`id_ketua`),
-  CONSTRAINT `rmk_ibfk_1` FOREIGN KEY (`id_kurikulum`) REFERENCES `kurikulum` (`id`),
-  CONSTRAINT `rmk_ibfk_2` FOREIGN KEY (`id_ketua`) REFERENCES `user` (`id`)
+  CONSTRAINT `rmk_ibfk_1` FOREIGN KEY (`id_ketua`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

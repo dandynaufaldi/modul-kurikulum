@@ -18,14 +18,6 @@
     <div class="row">
         <div class="col-md-6">    
             <div class='form-group'>
-                <label for='kurikulum'>Kurikulum</label>
-                <select class="form-control" name="kurikulum" required>
-                    {% for kurikulum in listKurikulum %}
-                        <option value="{{ kurikulum.id }}">{{ kurikulum.namaIndonesia }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class='form-group'>
                 <label for='ketua-rmk'>Ketua RMK</label>
                 <select class="form-control" name="ketua" required>
                     {% for user in listUser %}
