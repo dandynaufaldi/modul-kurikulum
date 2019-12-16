@@ -33,6 +33,10 @@
                     {% endfor %}
                 </select>
             </div>
+            <div class='form-group'>
+                <label for='kode_rmk'>Kode RMK</label>
+                <input type="text" class="form-control" id="kode_rmk" name="kode_rmk" required>
+            </div>
         </div>
         <div class="col-md-6">
             <div class='form-group'>
