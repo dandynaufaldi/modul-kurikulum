@@ -2,6 +2,7 @@
 
 namespace Siakad\Kurikulum\Infrastructure;
 
+use Exception;
 use PDO;
 use Phalcon\Db\Column;
 use Siakad\Kurikulum\Domain\Model\NamaBilingual;
@@ -15,6 +16,9 @@ class SqlRMKRepository implements RMKRepository
 {
     private static $all = 'all';
     private static $byKode = 'byKode';
+    private static $byId = 'byId';
+    private static $save = 'save';
+    private static $insert = 'insert';
 
     private $db;
     private $statements;
@@ -31,7 +35,6 @@ class SqlRMKRepository implements RMKRepository
     {
         $queryAll = 'SELECT 
             rmk.id AS rmk_id,
-            rmk.id_kurikulum AS rmk_id_kurikulum,
             rmk.id_ketua AS rmk_id_ketua,
             rmk.kode_rmk AS rmk_kode,
             rmk.nama AS rmk_nama_indonesia,
@@ -50,17 +53,37 @@ class SqlRMKRepository implements RMKRepository
             self::$byKode => $this->db->prepare(
                 $queryAll . ' WHERE rmk.kode = :kode'
             ),
+            self::$byId => $this->db->prepare(
+                $queryAll . ' WHERE rmk.id = :id'
+            ),
+            self::$insert => $this->db->prepare(
+                'INSERT INTO rmk
+                (id, id_ketua, kode_rmk, nama, nama_inggris)
+                VALUES
+                (:id, :id_ketua, :kode_rmk, :nama_indonesia, :nama_inggris)'
+            ),
         ];
     }
 
     private function initTypes()
     {
+        $allColumn = [
+            'id' => Column::BIND_PARAM_STR,
+            'id_ketua' => Column::BIND_PARAM_INT,
+            'kode_rmk' => Column::BIND_PARAM_STR,
+            'nama_indonesia' => Column::BIND_PARAM_STR,
+            'nama_inggris' => Column::BIND_PARAM_STR,
+        ];
+
         $this->types = [
             self::$all => [],
-            
             self::$byKode => [
                 'kode' => Column::BIND_PARAM_STR
             ],
+            self::$byId => [
+                'id' => Column::BIND_PARAM_STR
+            ],
+            self::$save => $allColumn,
         ];
     }
 
@@ -100,7 +123,26 @@ class SqlRMKRepository implements RMKRepository
         return $listRMK;
     }
 
-    public function byKode(string $kode): RMK
+    public function byId(string $id)
+    {
+        $statement = $this->statements[self::$byId];
+        $type = $this->types[self::$byId];
+        $params = [
+            'id' => $id
+        ];
+
+        $result = $this->db->executePrepared($statement, $params, $type);
+
+        if ($result->rowCount() == 0) {
+            return null;
+        }
+        
+        $rmk = $this->arrayToEntity($result->fetch(PDO::FETCH_ASSOC));
+        
+        return $rmk;
+    }
+
+    public function byKode(string $kode)
     {
         $statement = $this->statements[self::$byKode];
         $type = $this->types[self::$byKode];
@@ -115,5 +157,27 @@ class SqlRMKRepository implements RMKRepository
         
         $rmk = $this->arrayToEntity($result->fetch(PDO::FETCH_ASSOC));
         return $rmk;
+    }
+
+    public function save(RMK $rmk)
+    {
+        $existing = $this->byId($rmk->id()->id());
+        if (empty($existing)) {
+            $statement = $this->statements[self::$insert];
+        } else {
+            // $statement = $this->statements[self::$update];
+        }
+        $type = $this->types[self::$save];
+        $params = [
+            'id' => $rmk->id()->id(),
+            'id_ketua' => $rmk->ketua()->id(),
+            'kode_rmk' => $rmk->kode(),
+            'nama_indonesia' => $rmk->nama()->indonesia(),
+            'nama_inggris' => $rmk->nama()->inggris(),
+        ];
+        $success = $this->db->executePrepared($statement, $params, $type);
+        if (!$success) {
+            throw new Exception('Failed to save RMK');
+        }
     }
 }

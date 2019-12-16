@@ -4,6 +4,7 @@ use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 use Siakad\Kurikulum\Application\HapusKurikulumService;
 use Siakad\Kurikulum\Application\KelolaKurikulumService;
+use Siakad\Kurikulum\Application\KelolaRMKService;
 use Siakad\Kurikulum\Application\LihatDaftarKurikulumService;
 use Siakad\Kurikulum\Application\LihatDaftarRMKService;
 use Siakad\Kurikulum\Application\LihatFormKurikulumService;
@@ -122,6 +123,15 @@ $di->set('form_rmk_service', function() use ($di) {
     $rmkRepository = $di->get('sql_rmk_repository');
     $userRepository = $di->get('sql_user_repository');
     return new LihatFormRMKService(
+        $rmkRepository,
+        $userRepository
+    );
+});
+
+$di->set('kelola_rmk_service', function() use ($di) {
+    $rmkRepository = $di->get('sql_rmk_repository');
+    $userRepository = $di->get('sql_user_repository');
+    return new KelolaRMKService(
         $rmkRepository,
         $userRepository
     );
