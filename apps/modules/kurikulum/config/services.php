@@ -5,8 +5,10 @@ use Phalcon\Mvc\View\Engine\Volt;
 use Siakad\Kurikulum\Application\HapusKurikulumService;
 use Siakad\Kurikulum\Application\KelolaKurikulumService;
 use Siakad\Kurikulum\Application\LihatDaftarKurikulumService;
+use Siakad\Kurikulum\Application\LihatDaftarMataKuliahService;
 use Siakad\Kurikulum\Application\LihatFormKurikulumService;
 use Siakad\Kurikulum\Infrastructure\SqlKurikulumRepository;
+use Siakad\Kurikulum\Infrastructure\SqlMataKuliahRepository;
 use Siakad\Kurikulum\Infrastructure\SqlProgramStudiRepository;
 
 $di['voltServiceMail'] = function($view) use ($di) {
@@ -65,6 +67,11 @@ $di->setShared('sql_prodi_repository', function() use ($di) {
     return $repo;
 });
 
+$di->setShared('sql_mata_kuliah_repository', function() use ($di) {
+    $repo = new SqlMataKuliahRepository($di);
+    return $repo;
+});
+
 $di->set('daftar_kurikulum_service', function() use ($di) {
     $kurikulumRepository = $di->get('sql_kurikulum_repository');
     return new LihatDaftarKurikulumService(
@@ -94,5 +101,12 @@ $di->set('hapus_kurikulum_service', function() use ($di) {
     $kurikulumRepository = $di->get('sql_kurikulum_repository');
     return new HapusKurikulumService(
         $kurikulumRepository
+    );
+});
+
+$di->set('daftar_mata_kuliah_service', function() use ($di) {
+    $mataKuliahRepository = $di->get('sql_mata_kuliah_repository');
+    return new LihatDaftarMataKuliahService(
+        $mataKuliahRepository
     );
 });
