@@ -39,6 +39,14 @@ class RMKController extends Controller
         $this->handleAddGet();
     }
 
+    public function editAction()
+    {
+        if ($this->request->isPost()) {
+            $this->handleFormRMK();
+        }
+        $this->handleEditGet();
+    }
+
     private function handleAddGet()
     {
         $service = $this->formRMKService;
@@ -47,7 +55,6 @@ class RMKController extends Controller
         );
         
         $this->view->rmk = $response->rmk;
-        $this->view->listKurikulum = $response->listKurikulum;
         $this->view->listUser = $response->listUser;
         $this->view->action = 'rmk/add';
         return $this->view->pick('rmk/form');
@@ -83,6 +90,20 @@ class RMKController extends Controller
         } catch (Exception $e) {
             $this->flashSession->error('Internal Server Error');
         }
+        return $this->view->pick('rmk/form');
+    }
+
+    private function handleEditGet()
+    {
+        $id = $this->dispatcher->getParam('id');
+        $service = $this->formRMKService;
+        $response = $service->execute(
+            new LihatFormRMKRequest($id)
+        );
+
+        $this->view->rmk = $response->rmk;
+        $this->view->listUser = $response->listUser;
+        $this->view->action = "rmk/{$id}/edit";
         return $this->view->pick('rmk/form');
     }
 

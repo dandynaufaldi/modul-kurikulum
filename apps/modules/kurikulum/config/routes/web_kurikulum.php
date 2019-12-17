@@ -43,3 +43,10 @@ $router->add('/rmk/add', [
     'controller' => 'rmk',
     'action' => 'add'
 ]);
+
+$router->add('/rmk/{id}/edit', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'rmk',
+    'action' => 'edit'
+]);
