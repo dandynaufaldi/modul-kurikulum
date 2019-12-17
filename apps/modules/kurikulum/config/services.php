@@ -3,6 +3,7 @@
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 use Siakad\Kurikulum\Application\HapusKurikulumService;
+use Siakad\Kurikulum\Application\HapusRMKService;
 use Siakad\Kurikulum\Application\HapusMataKuliahService;
 use Siakad\Kurikulum\Application\KelolaKurikulumService;
 use Siakad\Kurikulum\Application\KelolaMataKuliahService;
@@ -144,6 +145,13 @@ $di->set('kelola_rmk_service', function() use ($di) {
     return new KelolaRMKService(
         $rmkRepository,
         $userRepository
+    );
+});
+
+$di->set('hapus_rmk_service', function() use ($di) {
+    $rmkRepository = $di->get('sql_rmk_repository');
+    return new HapusRMKService(
+        $rmkRepository
     );
 });
 

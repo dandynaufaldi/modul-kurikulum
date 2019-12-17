@@ -13,6 +13,7 @@ class LihatFormRMKResponse
     public function __construct(RMK $rmk = null)
     {
         $this->listUser = array();
+        $this->rmk = RMKViewModel::fromRMK($rmk);
     }
 
     public function addUser(User $user)

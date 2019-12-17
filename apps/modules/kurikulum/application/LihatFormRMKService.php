@@ -23,10 +23,10 @@ class LihatFormRMKService
     {
         $listUser = $this->userRepository->byRoleGreaterThanEqual(3);
 
-        if (empty($request->rmkKode)) {
+        if (empty($request->rmkId)) {
             $response = new LihatFormRMKResponse();
         } else {
-            $rmk = $this->rmkRepository->byKode($request->rmkKode);
+            $rmk = $this->rmkRepository->byId($request->rmkId);
             if (empty($rmk)) {
                 throw new RMKNotFoundException("RMK not exists");
             }

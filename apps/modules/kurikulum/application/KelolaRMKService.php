@@ -31,7 +31,8 @@ class KelolaRMKService
             $request->kode,
             $request->namaIndonesia,
             $request->namaInggris,
-            $user
+            $user,
+            $request->id
         );
         $this->rmkRepository->save($rmk);
     }
