@@ -3,12 +3,14 @@
 namespace Siakad\Kurikulum\Infrastructure;
 
 use PDO;
+use Exception;
 use Phalcon\Db\Column;
 use Siakad\Kurikulum\Domain\Model\MataKuliah;
 use Siakad\Kurikulum\Domain\Model\MataKuliahId;
 use Siakad\Kurikulum\Domain\Model\MataKuliahRepository;
 use Siakad\Kurikulum\Domain\Model\NamaBilingual;
 use Siakad\Kurikulum\Domain\Model\RMK;
+use Siakad\Kurikulum\Domain\Model\RMKId;
 use Siakad\Kurikulum\Domain\Model\User;
 use Siakad\Kurikulum\Domain\Model\UserRole;
 
@@ -40,8 +42,10 @@ class SqlMataKuliahRepository implements MataKuliahRepository
             mata_kuliah.nama as mata_kuliah_nama,
             mata_kuliah.nama_inggris as mata_kuliah_nama_inggris,
             mata_kuliah.deskripsi as mata_kuliah_deskripsi,
+            rmk.id as rmk_id,
             rmk.kode_rmk as rmk_kode,
             rmk.nama as rmk_nama,
+            rmk.nama_inggris as rmk_nama_inggris,
             user.id as user_id,
             user.nama AS user_nama,
             user.identifier AS user_identifier,
@@ -58,12 +62,17 @@ class SqlMataKuliahRepository implements MataKuliahRepository
             self::$byId => $this->db->prepare(
                 $queryAll . ' AND mata_kuliah.id = :id'
             ),
-            self::$save => $this->db->prepare(
+            self::$insert => $this->db->prepare(
                 'INSERT INTO mata_kuliah (id, id_rmk, kode_matkul, nama, nama_inggris, deskripsi) 
                 VALUES (:id, :id_rmk, :kode_matkul, :nama, :nama_inggris, :deskripsi)'
             ),
+            self::$update => $this->db->prepare(
+                'UPDATE mata_kuliah SET id_rmk = :id_rmk, kode_matkul = :kode_matkul, 
+                nama = :nama, nama_inggris = :nama_inggris, deskripsi = :deskripsi 
+                WHERE id = :id'
+            ),
             self::$delete => $this->db->prepare(
-                'UPDATE mata_kuliah SET deleted_at = CURRENT_TIMESTAMP WHERE id = :id'
+                'UPDATE mata_kuliah SET deleted_at = CURRENT_TIMESTAMP WHERE id = :id;'
             )
         ];
     }
@@ -98,7 +107,12 @@ class SqlMataKuliahRepository implements MataKuliahRepository
             UserRole::make(intval($data['user_level']))
         );
 
-        $rmk = new RMK($data['rmk_kode'],$data['rmk_nama'], $kaprodi);
+        $rmk = new RMK(
+            new RMKId($data['rmk_id']),
+            $data['rmk_kode'],
+            new NamaBilingual($data['rmk_nama'], $data['rmk_nama_inggris']),
+            $kaprodi
+        );
 
         $mataKuliah = new MataKuliah(
             new MataKuliahId($data['mata_kuliah_id']),
@@ -119,7 +133,7 @@ class SqlMataKuliahRepository implements MataKuliahRepository
             'id' => $mataKuliahId->id()
         ];
 
-        $result = $this->db->execurePrepared($statement, $params, $type);
+        $result = $this->db->executePrepared($statement, $params, $type);
         if($result->rowcount() == 0) {
             return null;
         }
@@ -148,11 +162,38 @@ class SqlMataKuliahRepository implements MataKuliahRepository
 
     public function save(MataKuliah $mataKuliah): void
     {
-        // TODO: Implement save() method.
+        $existing = $this->byId($mataKuliah->getId());
+        if (empty($existing)) {
+            $statement = $this->statements[self::$insert];
+        } else {
+            $statement = $this->statements[self::$update];
+        }
+        $type = $this->types[self::$save];
+        $params = [
+            'id' => $mataKuliah->getId()->id(),
+            'id_rmk' => $mataKuliah->getRmk()->id()->id(),
+            'kode_matkul' => $mataKuliah->getKode(),
+            'nama' => $mataKuliah->getNama()->indonesia(),
+            'nama_inggris' => $mataKuliah->getNama()->inggris(),
+            'deskripsi' => $mataKuliah->getDeskripsi()
+        ];
+
+        $success = $this->db->executePrepared($statement, $params, $type);
+        if(!$success) {
+            throw new Exception('Failed to save mata kuliah');
+        }
     }
 
     public function delete(MataKuliahId $mataKuliahId): void
     {
-        // TODO: Implement delete() method.
+        $statement = $this->statements[self::$delete];
+        $type = $this->types[self::$delete];
+        $params = [
+            'id' => $mataKuliahId->id()
+        ];
+        $success = $this->db->executePrepared($statement, $params, $type);
+        if(!$success) {
+            throw new Exception('Failed to delete matakuliah');
+        }
     }
 }

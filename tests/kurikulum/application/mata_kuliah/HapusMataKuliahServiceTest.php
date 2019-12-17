@@ -10,6 +10,7 @@ use Siakad\Kurikulum\Domain\Model\MataKuliahId;
 use Siakad\Kurikulum\Domain\Model\MataKuliahRepository;
 use Siakad\Kurikulum\Domain\Model\NamaBilingual;
 use Siakad\Kurikulum\Domain\Model\RMK;
+use Siakad\Kurikulum\Domain\Model\RMKId;
 use Siakad\Kurikulum\Domain\Model\User;
 use Siakad\Kurikulum\Domain\Model\UserRole;
 
@@ -41,7 +42,13 @@ class HapusMataKuliahServiceTest extends TestCase
             'John Doe',
             UserRole::make(UserRole::$LEVEL_DOSEN)
         );
-        $rmk = new RMK('51100', 'Rekayasa Perangkat Lunak', $dosen);
+        $rmkId = new RMKId('123');
+        $namaRmk = new NamaBilingual('Rekayasa Perangkat Lunak', 'Software Construction');
+        $rmk = new RMK(
+            $rmkId,
+            '51100',
+            $namaRmk,
+            $dosen);
         $kode = 'IF184000';
         $deskripsi = 'Mata kuliah mengenai konstruksi perangkat lunak';
 

@@ -69,7 +69,7 @@ class SqlUserRepository implements UserRepository
             $data['user_id'],
             $data['user_identifier'],
             $data['user_nama'],
-            new UserRole($data['user_level']),
+            new UserRole($data['user_level'])
         );
     }
 

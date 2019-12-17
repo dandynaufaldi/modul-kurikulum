@@ -6,6 +6,7 @@ use Siakad\Kurikulum\Domain\Model\MataKuliah;
 use Siakad\Kurikulum\Domain\Model\MataKuliahId;
 use Siakad\Kurikulum\Domain\Model\NamaBilingual;
 use Siakad\Kurikulum\Domain\Model\RMK;
+use Siakad\Kurikulum\Domain\Model\RMKId;
 use Siakad\Kurikulum\Domain\Model\User;
 use Siakad\Kurikulum\Domain\Model\UserRole;
 
@@ -27,8 +28,9 @@ class MataKuliahTest extends TestCase
             UserRole::make(UserRole::$LEVEL_DOSEN)
         );
         self::$rmk = new RMK(
+            new RMKId(),
             '51100',
-            'RMK Satu',
+            new NamaBilingual('Rekayasa Perangkat Lunak', 'Software Construction'),
             $dosen
         );
 

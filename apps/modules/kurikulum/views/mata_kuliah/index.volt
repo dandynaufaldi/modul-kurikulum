@@ -32,16 +32,16 @@
         {% for matakuliah in listMataKuliah %}
         <tr>
             <td>{{ matakuliah.kode }}</td>
-            <td>{{ matakuliah.nama }}</td>
-            <td>{{ matakuliah.kodeRmk }}</td>
-            <td>{{ matakuliah.namaRmk }}</td>
+            <td>{{ matakuliah.namaIndonesia }}</td>
+            <td>{{ matakuliah.rmk.kode }}</td>
+            <td>{{ matakuliah.rmk.namaIndonesia }}</td>
             <td>{{ matakuliah.deskripsi }}</td>
             <td>
                 <div class="pull-left">
                     <a href="{{ url('mata-kuliah/' ~ matakuliah.id ~'/edit') }}" class="btn btn-info btn-sm" role="button">Edit</a>
                 </div>
                 <div class="pull-right">
-                    {{ form('kurikulum/' ~ matakuliah.id ~ '/delete', 'method': 'POST', 'onsubmit' : "return confirm('Apakah yakin untuk menghapus " ~ matakuliah.nama ~ "?')")}}
+                    {{ form('mata-kuliah/' ~ matakuliah.id ~ '/delete', 'method': 'POST', 'onsubmit' : "return confirm('Apakah yakin untuk menghapus " ~ matakuliah.namaIndonesia ~ "?')")}}
                         {{ hidden_field('id', 'value': matakuliah.id ) }}
                         {{ submit_button('Hapus', 'type': 'button', 'class': 'btn btn-danger btn-sm') }}
                     {{ end_form() }}

@@ -9,38 +9,38 @@ use Siakad\Kurikulum\Domain\Model\MataKuliah;
 class MataKuliahViewModel
 {
     public $id;
-    public $nama;
+    public $namaIndonesia;
+    public $namaInggris;
     public $kode;
-    public $namaRmk;
-    public $kodeRmk;
+    public $rmk;
     public $deskripsi;
 
     /**
      * MataKuliahViewModel constructor.
-     *
      * @param string $id
-     * @param string $nama
+     * @param string $namaIndonesia
+     * @param string $namaInggris
      * @param string $kode
-     * @param string $namaRmk
-     * @param string $kodeRmk
+     * @param RMKViewModel $rmk
      * @param string $deskripsi
      */
     public function __construct(
         string $id,
-        string $nama,
+        string $namaIndonesia,
+        string $namaInggris,
         string $kode,
-        string $namaRmk,
-        string $kodeRmk,
+        RMKViewModel $rmk,
         string $deskripsi
     )
     {
         $this->id = $id;
-        $this->nama = $nama;
+        $this->namaIndonesia = $namaIndonesia;
+        $this->namaInggris = $namaInggris;
         $this->kode = $kode;
-        $this->namaRmk = $namaRmk;
-        $this->kodeRmk = $kodeRmk;
+        $this->rmk = $rmk;
         $this->deskripsi = $deskripsi;
     }
+
 
 
     /**
@@ -54,9 +54,9 @@ class MataKuliahViewModel
         return new MataKuliahViewModel(
             $mataKuliah->getId()->id(),
             $mataKuliah->getNama()->indonesia(),
+            $mataKuliah->getNama()->inggris(),
             $mataKuliah->getKode(),
-            $mataKuliah->getRmk()->name(),
-            $mataKuliah->getRmk()->kode(),
+            RMKViewModel::fromRMK($mataKuliah->getRmk()),
             $mataKuliah->getDeskripsi()
         );
     }
