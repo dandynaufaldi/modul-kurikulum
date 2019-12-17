@@ -13,34 +13,27 @@ use Siakad\Kurikulum\Application\ProgramStudiNotFoundException;
 use Siakad\Kurikulum\Controllers\Validators\KurikulumValidator;
 use Siakad\Kurikulum\Domain\Model\UnrecognizedSemesterException;
 
-class KurikulumController extends Controller
+class MataKuliahController extends Controller
 {
-    private $daftarKurikulumService;
-    private $kelolaKurikulumService;
-    private $formKurikulumService;
-    private $hapusKurikulumService;
+    private $daftarMataKuliahService;
 
     public function initialize()
     {
-        $this->daftarKurikulumService = $this->di->get('daftar_kurikulum_service');
-        $this->kelolaKurikulumService = $this->di->get('kelola_kurikulum_service');
-        $this->formKurikulumService = $this->di->get('form_kurikulum_service');
-        $this->hapusKurikulumService = $this->di->get('hapus_kurikulum_service');
-
+        $this->daftarMataKuliahService = $this->di->get('daftar_mata_kuliah_service');
     }
 
     public function indexAction()
     {
-        $service = $this->daftarKurikulumService;
+        $service = $this->daftarMataKuliahService;
         $response = $service->execute();
-        $this->view->listKurikulum = $response->listKurikulum;
-        return $this->view->pick('kurikulum/index');
+        $this->view->listMataKuliah = $response->listMataKuliah;
+        return $this->view->pick('mata_kuliah/index');
     }
     
     public function addAction()
     {        
         if ($this->request->isPost()) {
-            $this->handleFormKurikulum();
+            $this->handleFormMataKuliah();
         }
         $this->handleAddGet();
     }
@@ -58,7 +51,7 @@ class KurikulumController extends Controller
         return $this->view->pick('kurikulum/form');
     }
 
-    private function handleFormKurikulum()
+    private function handleFormMataKuliah()
     {
         $validator = new KurikulumValidator();
         $messages = $validator->validate($_POST);
@@ -116,7 +109,7 @@ class KurikulumController extends Controller
     public function editAction()
     {
         if ($this->request->isPost()) {
-            $this->handleFormKurikulum();
+            $this->handleFormMataKuliah();
         }
         $this->handleEditGet();
     }

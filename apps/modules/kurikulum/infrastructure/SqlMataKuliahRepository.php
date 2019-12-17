@@ -2,6 +2,7 @@
 
 namespace Siakad\Kurikulum\Infrastructure;
 
+use PDO;
 use Phalcon\Db\Column;
 use Siakad\Kurikulum\Domain\Model\MataKuliah;
 use Siakad\Kurikulum\Domain\Model\MataKuliahId;
@@ -16,6 +17,8 @@ class SqlMataKuliahRepository implements MataKuliahRepository
     private static $byId = 'byId';
     private static $all = 'all';
     private static $save = 'save';
+    private static $insert = 'insert';
+    private static $update = 'update';
     private static $delete = 'delete';
 
     private $db;
@@ -62,7 +65,7 @@ class SqlMataKuliahRepository implements MataKuliahRepository
             self::$delete => $this->db->prepare(
                 'UPDATE mata_kuliah SET deleted_at = CURRENT_TIMESTAMP WHERE id = :id'
             )
-        ]
+        ];
     }
 
     private function initTypes()
@@ -136,7 +139,7 @@ class SqlMataKuliahRepository implements MataKuliahRepository
         $listResultAssoc = $result->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($listResultAssoc as $resultAssoc) {
-            $mataKuliah = $this->toArrayEntity($resultAssoc);
+            $mataKuliah = $this->arrayToEntity($resultAssoc);
             $listMataKuliah[] = $mataKuliah;
         }
 

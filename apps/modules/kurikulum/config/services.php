@@ -110,3 +110,10 @@ $di->set('daftar_mata_kuliah_service', function() use ($di) {
         $mataKuliahRepository
     );
 });
+
+$di->set('hapus_mata_kuliah_service', function() use ($di) {
+    $mataKuliahRepository = $di->get('sql_mata_kuliah_repository');
+    return new HapusKurikulumService(
+        $mataKuliahRepository
+    );
+});
