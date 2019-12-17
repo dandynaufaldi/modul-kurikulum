@@ -5,8 +5,10 @@ namespace Siakad\Kurikulum\Controllers\Web;
 use Exception;
 use InvalidArgumentException;
 use Phalcon\Mvc\Controller;
+use Siakad\Kurikulum\Application\HapusRMKRequest;
 use Siakad\Kurikulum\Application\KelolaRMKRequest;
 use Siakad\Kurikulum\Application\LihatFormRMKRequest;
+use Siakad\Kurikulum\Application\RMKNotFoundException;
 use Siakad\Kurikulum\Application\UserNotFoundException;
 use Siakad\Kurikulum\Controllers\Validators\RMKValidator;
 
@@ -15,12 +17,14 @@ class RMKController extends Controller
     private $daftarRMKService;
     private $formRMKService;
     private $kelolaRMKService;
+    private $hapusRMKService;
     
     public function initialize()
     {
         $this->daftarRMKService = $this->di->get('daftar_rmk_service');
         $this->formRMKService = $this->di->get('form_rmk_service');
         $this->kelolaRMKService = $this->di->get('kelola_rmk_service');
+        $this->hapusRMKService = $this->di->get('hapus_rmk_service');
     }
 
     public function indexAction()
@@ -45,6 +49,24 @@ class RMKController extends Controller
             $this->handleFormRMK();
         }
         $this->handleEditGet();
+    }
+
+    public function deleteAction()
+    {
+        $id = $this->request->getPost('id');
+        $request = new HapusRMKRequest($id);
+        $service = $this->hapusRMKService;
+
+        try {
+            $service->execute($request);
+            $this->flashSession->success('Berhasil menghapus kurikulum');
+        } catch (RMKNotFoundException $e) {
+            $this->flashSession->error($e->getMessage());
+        } catch (Exception $e) {
+            $this->flashSession->error('Internal Server Error');
+        }
+
+        return $this->response->redirect('rmk');
     }
 
     private function handleAddGet()
@@ -79,7 +101,7 @@ class RMKController extends Controller
             $this->request->getPost('ketua_identifier'),
             $id
         );
-        
+
         $service = $this->kelolaRMKService;
         try {
             $service->execute($request);

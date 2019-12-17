@@ -50,3 +50,10 @@ $router->add('/rmk/{id}/edit', [
     'controller' => 'rmk',
     'action' => 'edit'
 ]);
+
+$router->addPost('/rmk/{id}/delete', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'rmk',
+    'action' => 'delete'
+]);

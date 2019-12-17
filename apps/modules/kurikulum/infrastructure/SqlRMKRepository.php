@@ -20,6 +20,7 @@ class SqlRMKRepository implements RMKRepository
     private static $save = 'save';
     private static $insert = 'insert';
     private static $update = 'update';
+    private static $delete = 'delete';
 
     private $db;
     private $statements;
@@ -69,6 +70,11 @@ class SqlRMKRepository implements RMKRepository
                 nama = :nama_indonesia, nama_inggris = :nama_inggris
                 WHERE id = :id'
             ),
+            self::$delete => $this->db->prepare(
+                'UPDATE rmk
+                SET deleted_at = CURRENT_TIMESTAMP
+                WHERE id = :id'
+            ),
         ];
     }
 
@@ -91,6 +97,9 @@ class SqlRMKRepository implements RMKRepository
                 'id' => Column::BIND_PARAM_STR
             ],
             self::$save => $allColumn,
+            self::$delete => [
+                'id' => Column::BIND_PARAM_STR
+            ],
         ];
     }
 
@@ -185,6 +194,20 @@ class SqlRMKRepository implements RMKRepository
         $success = $this->db->executePrepared($statement, $params, $type);
         if (!$success) {
             throw new Exception('Failed to save RMK');
+        }
+    }
+
+    public function delete(RMKId $rmkId)
+    {
+        $statement = $this->statements[self::$delete];
+        $type = $this->types[self::$delete];
+        $params = [
+            'id' => $rmkId->id()
+        ];
+
+        $success = $this->db->executePrepared($statement, $params, $type);
+        if (!$success) {
+            throw new Exception('Failed to delete RMK');
         }
     }
 }
