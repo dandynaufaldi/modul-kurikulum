@@ -46,11 +46,12 @@ class RMK
         string $kode,
         string $namaIndonesia,
         string $namaInggris,
-        User $ketua
+        User $ketua,
+        string $id
     ) : RMK
     {
         return new RMK(
-            new RMKId(),
+            new RMKId($id),
             $kode,
             new NamaBilingual(
                 $namaIndonesia,
