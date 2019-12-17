@@ -22,7 +22,7 @@
                 <label for='kode_rmk'>RMK</label>
                 <select class="form-control" name="kode_rmk" required>
                     {% for rmk in listRmk %}
-                        <option value="{{ rmk.kode }}">{{ rmk.namaIndonesia }}</option>
+                        <option value="{{ rmk.kode }}" {% if mataKuliah and rmk.kode == mataKuliah.rmk.kode %} selected {% endif %}>{{ rmk.namaIndonesia }}</option>
                     {% endfor %}
                 </select>
             </div>
