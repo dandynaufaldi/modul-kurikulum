@@ -1,11 +1,11 @@
 {% extends 'layout.volt' %}
 
-{% block title %}Tambah Kurikulum{% endblock %}
+{% block title %}Form Kurikulum{% endblock %}
 
 {% block content %}
     {{ flashSession.output() }}
     <div class="row">
-        <div class="col-md-12 pull-left"><h2>Tambah Kurikulum</h2></div>
+        <div class="col-md-12 pull-left"><h2>Form Kurikulum</h2></div>
     </div>
     <hr>
     <div class="row">

@@ -1,6 +1,6 @@
 {% extends 'layout.volt' %}
 
-{% block title %}Tambah RMK{% endblock %}
+{% block title %}Form RMK{% endblock %}
 
 {% block content %}
     {{ flashSession.output() }}

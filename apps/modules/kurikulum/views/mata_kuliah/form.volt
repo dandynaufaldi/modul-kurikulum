@@ -1,11 +1,11 @@
 {% extends 'layout.volt' %}
 
-{% block title %}Tambah Mata Kuliah{% endblock %}
+{% block title %}Form Mata Kuliah{% endblock %}
 
 {% block content %}
     {{ flashSession.output() }}
     <div class="row">
-        <div class="col-md-12 pull-left"><h2>Tambah Mata Kuliah</h2></div>
+        <div class="col-md-12 pull-left"><h2>Form Mata Kuliah</h2></div>
     </div>
     <hr>
     <div class="row">
