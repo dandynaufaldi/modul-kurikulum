@@ -46,7 +46,8 @@ class SqlRMKRepository implements RMKRepository
             user.identifier AS user_identifier,
             user.level AS user_level
         FROM rmk
-        JOIN user ON rmk.id_ketua = user.id';
+        JOIN user ON rmk.id_ketua = user.id
+        WHERE rmk.deleted_at IS NULL';
 
         $this->statements = [
             self::$all => $this->db->prepare(
