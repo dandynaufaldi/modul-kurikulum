@@ -57,7 +57,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="{{ url('matakuliah') }}">
+            <a class="nav-link" href="{{ url('mata-kuliah') }}">
             <i class="fas fa-fw fa-book-open"></i>
             <span>Mata Kuliah</span></a>
         </li>
