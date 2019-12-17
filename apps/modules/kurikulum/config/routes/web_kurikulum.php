@@ -29,3 +29,31 @@ $router->addPost('/kurikulum/{id}/delete', [
     'controller' => 'kurikulum',
     'action' => 'delete'
 ]);
+
+$router->addGet('/rmk', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'rmk',
+    'action' => 'index'
+]);
+
+$router->add('/rmk/add', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'rmk',
+    'action' => 'add'
+]);
+
+$router->add('/rmk/{id}/edit', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'rmk',
+    'action' => 'edit'
+]);
+
+$router->addPost('/rmk/{id}/delete', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'rmk',
+    'action' => 'delete'
+]);
