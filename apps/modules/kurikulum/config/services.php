@@ -4,12 +4,17 @@ use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 use Siakad\Kurikulum\Application\HapusKurikulumService;
 use Siakad\Kurikulum\Application\KelolaKurikulumService;
+use Siakad\Kurikulum\Application\KelolaRMKService;
 use Siakad\Kurikulum\Application\LihatDaftarKurikulumService;
+use Siakad\Kurikulum\Application\LihatDaftarRMKService;
 use Siakad\Kurikulum\Application\LihatDaftarMataKuliahService;
 use Siakad\Kurikulum\Application\LihatFormKurikulumService;
+use Siakad\Kurikulum\Application\LihatFormRMKService;
 use Siakad\Kurikulum\Infrastructure\SqlKurikulumRepository;
 use Siakad\Kurikulum\Infrastructure\SqlMataKuliahRepository;
 use Siakad\Kurikulum\Infrastructure\SqlProgramStudiRepository;
+use Siakad\Kurikulum\Infrastructure\SqlRMKRepository;
+use Siakad\Kurikulum\Infrastructure\SqlUserRepository;
 
 $di['voltServiceMail'] = function($view) use ($di) {
 
@@ -72,6 +77,16 @@ $di->setShared('sql_mata_kuliah_repository', function() use ($di) {
     return $repo;
 });
 
+$di->setShared('sql_rmk_repository', function() use ($di) {
+    $repo = new SqlRMKRepository($di);
+    return $repo;
+});
+
+$di->setShared('sql_user_repository', function() use ($di) {
+    $repo = new SqlUserRepository($di);
+    return $repo;
+});
+
 $di->set('daftar_kurikulum_service', function() use ($di) {
     $kurikulumRepository = $di->get('sql_kurikulum_repository');
     return new LihatDaftarKurikulumService(
@@ -101,6 +116,31 @@ $di->set('hapus_kurikulum_service', function() use ($di) {
     $kurikulumRepository = $di->get('sql_kurikulum_repository');
     return new HapusKurikulumService(
         $kurikulumRepository
+    );
+});
+
+$di->set('daftar_rmk_service', function() use ($di) {
+    $rmkRepository = $di->get('sql_rmk_repository');
+    return new LihatDaftarRMKService(
+        $rmkRepository
+    );
+});
+
+$di->set('form_rmk_service', function() use ($di) {
+    $rmkRepository = $di->get('sql_rmk_repository');
+    $userRepository = $di->get('sql_user_repository');
+    return new LihatFormRMKService(
+        $rmkRepository,
+        $userRepository
+    );
+});
+
+$di->set('kelola_rmk_service', function() use ($di) {
+    $rmkRepository = $di->get('sql_rmk_repository');
+    $userRepository = $di->get('sql_user_repository');
+    return new KelolaRMKService(
+        $rmkRepository,
+        $userRepository
     );
 });
 
