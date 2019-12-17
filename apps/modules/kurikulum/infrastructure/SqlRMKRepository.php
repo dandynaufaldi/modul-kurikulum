@@ -19,6 +19,7 @@ class SqlRMKRepository implements RMKRepository
     private static $byId = 'byId';
     private static $save = 'save';
     private static $insert = 'insert';
+    private static $update = 'update';
 
     private $db;
     private $statements;
@@ -61,6 +62,12 @@ class SqlRMKRepository implements RMKRepository
                 (id, id_ketua, kode_rmk, nama, nama_inggris)
                 VALUES
                 (:id, :id_ketua, :kode_rmk, :nama_indonesia, :nama_inggris)'
+            ),
+            self::$update => $this->db->prepare(
+                'UPDATE rmk
+                SET id_ketua = :id_ketua, kode_rmk = :kode_rmk,
+                nama = :nama_indonesia, nama_inggris = :nama_inggris
+                WHERE id = :id'
             ),
         ];
     }
@@ -165,7 +172,7 @@ class SqlRMKRepository implements RMKRepository
         if (empty($existing)) {
             $statement = $this->statements[self::$insert];
         } else {
-            // $statement = $this->statements[self::$update];
+            $statement = $this->statements[self::$update];
         }
         $type = $this->types[self::$save];
         $params = [
