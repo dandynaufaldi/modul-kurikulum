@@ -106,7 +106,7 @@ class MataKuliahController extends Controller
         $service = $this->formMataKuliahService;
         $response = $service->execute($request);
 
-        $this->view->listRmk = $response->listProgramStudi;
+        $this->view->listRmk = $response->listRmk;
         $this->view->mataKuliah = $response->mataKuliah;
         $this->view->action = "mata-kuliah/{$id}/edit";
         return $this->view->pick('mata_kuliah/form');
