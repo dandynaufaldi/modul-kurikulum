@@ -26,7 +26,7 @@ class LihatFormRMKService
         if (empty($request->rmkId)) {
             $response = new LihatFormRMKResponse();
         } else {
-            $rmk = $this->rmkRepository->byId($request->rmkId->id());
+            $rmk = $this->rmkRepository->byId($request->rmkId);
             if (empty($rmk)) {
                 throw new RMKNotFoundException("RMK not exists");
             }

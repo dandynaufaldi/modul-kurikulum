@@ -54,10 +54,10 @@ class SqlRMKRepository implements RMKRepository
                 $queryAll
             ),
             self::$byKode => $this->db->prepare(
-                $queryAll . ' WHERE rmk.kode = :kode'
+                $queryAll . ' AND rmk.kode = :kode'
             ),
             self::$byId => $this->db->prepare(
-                $queryAll . ' WHERE rmk.id = :id'
+                $queryAll . ' AND rmk.id = :id'
             ),
             self::$insert => $this->db->prepare(
                 'INSERT INTO rmk
@@ -140,14 +140,14 @@ class SqlRMKRepository implements RMKRepository
         return $listRMK;
     }
 
-    public function byId(string $id)
+    public function byId(RMKId $id)
     {
         $statement = $this->statements[self::$byId];
         $type = $this->types[self::$byId];
         $params = [
-            'id' => $id
+            'id' => $id->id()
         ];
-
+        
         $result = $this->db->executePrepared($statement, $params, $type);
 
         if ($result->rowCount() == 0) {
@@ -178,7 +178,7 @@ class SqlRMKRepository implements RMKRepository
 
     public function save(RMK $rmk)
     {
-        $existing = $this->byId($rmk->id()->id());
+        $existing = $this->byId($rmk->id());
         if (empty($existing)) {
             $statement = $this->statements[self::$insert];
         } else {

@@ -15,7 +15,7 @@ class HapusRMKService
 
     public function execute(HapusRMKRequest $request)
     {
-        $rmk = $this->rmkRepository->byId($request->id->id());
+        $rmk = $this->rmkRepository->byId($request->id);
         if (empty($rmk)) {
             throw new RMKNotFoundException("RMK not exists");
         }
