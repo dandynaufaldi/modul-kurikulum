@@ -54,7 +54,7 @@ class SqlRMKRepository implements RMKRepository
                 $queryAll
             ),
             self::$byKode => $this->db->prepare(
-                $queryAll . ' AND rmk.kode = :kode'
+                $queryAll . ' AND rmk.kode_rmk = :kode'
             ),
             self::$byId => $this->db->prepare(
                 $queryAll . ' AND rmk.id = :id'

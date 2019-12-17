@@ -22,7 +22,7 @@
                 <label for='prodi'>Program Studi</label>
                 <select class="form-control" name="prodi" required>
                     {% for programStudi in listProgramStudi %}
-                        <option value="{{ programStudi.kode }}">{{ programStudi.nama }}</option>
+                        <option value="{{ programStudi.kode }}" {% if kurikulum and programStudi.kode == kurikulum.programStudi.kode %} selected {% endif %}>{{ programStudi.nama }}</option>
                     {% endfor %}
                 </select>
             </div>

@@ -22,7 +22,7 @@
                 <label for='ketua-rmk'>Ketua RMK</label>
                 <select class="form-control" name="ketua_identifier" required>
                     {% for user in listUser %}
-                        <option value="{{ user.identifier }}">{{ user.nama }}</option>
+                        <option value="{{ user.identifier }}" {% if rmk and user.identifier == rmk.ketua.identifier %} selected {% endif %}>{{ user.nama }}</option>
                     {% endfor %}
                 </select>
             </div>

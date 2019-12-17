@@ -60,7 +60,7 @@ class SqlKurikulumRepository implements KurikulumRepository
             user.level AS user_level
         FROM kurikulum 
             JOIN prodi ON kurikulum.kode_prodi = prodi.kode 
-            JOIN user ON user.id = prodi.id
+            JOIN user ON user.id = prodi.id_kaprodi
         WHERE kurikulum.deleted_at IS NULL';
         
         $this->statements = [
