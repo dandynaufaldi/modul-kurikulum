@@ -28,8 +28,8 @@ class Kurikulum
         int $semesterNormal,
         PeriodeTahun $periode,
         Semester $semesterMulai,
-        array $listMataKuliah = array(),
-        $aktif = false
+        $aktif = false,
+        array $listMataKuliah = array()
     )
     {
         if (!self::validateAktifPeriode($aktif, $periode)) {
@@ -46,6 +46,7 @@ class Kurikulum
         $this->semesterMulai = $semesterMulai;
         $this->aktif = $aktif;
         $this->listMataKuliah = $listMataKuliah;
+        $this->hitungSksWajib();
     }
 
     public static function validateAktifPeriode(bool $aktif, PeriodeTahun $periode) : bool
@@ -193,6 +194,7 @@ class Kurikulum
             $mataKuliah->setStatus(MataKuliah::$baru);
             $this->listMataKuliah[] = $mataKuliah;
         }
+        $this->hitungSksWajib();
     }
 
     public function hapusMataKuliah(MataKuliah $mataKuliah)
@@ -203,5 +205,17 @@ class Kurikulum
                 break;
             }
         }
+        $this->hitungSksWajib();
+    }
+
+    private function hitungSksWajib()
+    {
+        $total = 0;
+        foreach ($this->listMataKuliah as $mataKuliah) {
+            if ($mataKuliah->getSifat() == SifatMataKuliah::$wajib) {
+                $total += $mataKuliah->getSks();
+            }
+        }
+        $this->sksWajib = $total;
     }
 }

@@ -105,7 +105,8 @@ class KurikulumBuilder
                 $this->semesterNormal,
                 $this->periode,
                 $this->semesterMulai,
-                $this->aktif
+                $this->aktif,
+                $this->listMataKuliah
             );
             return $kurikulum;
        } catch (TypeError $e) {
