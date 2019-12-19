@@ -361,46 +361,96 @@ class SqlKurikulumRepository implements KurikulumRepository
     {
         $exist = $this->fetchMataKuliahById($kurikulumId, $mataKuliah->getId());
         if (!$exist) {
-            // TODO: insert new MK to mata_kuliah self::$insertMK
+            $statement = $this->statements[self::$insertMK];
+            $type = $this->types[self::$insertMK];
+            $params = [
+                'id' => $mataKuliah->getId()->id(),
+                'id_rmk' => $mataKuliah->getRmk()->id()->id(),
+                'kode_matkul' => $mataKuliah->getKode(),
+                'nama' => $mataKuliah->getNama()->indonesia(),
+                'nama_inggris' => $mataKuliah->getNama()->inggris(),
+                'deskripsi' => $mataKuliah->getDeskripsi()
+            ];
+            $this->db->executePrepared($statement, $params, $type);
         }
-        // TODO: add MK relation to mk_kur self::$addMKKurikulum
+        $this->updateMataKuliah($mataKuliah, $kurikulumId);
     }
 
     private function updateMataKuliah(MataKuliah $mataKuliah, KurikulumId $kurikulumId) : void
     {
-        // TODO: use self::$updateMKKurikulum as query
+        if ($mataKuliah->getStatus() == MataKuliah::$baru) {
+            $statement = $this->statements[self::$addMKKurikulum];
+        } else {
+            $statement = $this->statements[self::$updateMKKurikulum];
+        }
+        $type = $this->types[self::$saveMKKurikulum];
+        $params = [
+            'id_mk' => $mataKuliah->getRmk()->id()->id(),
+            'id_kurikulum' => $kurikulumId->id(),
+            'sifat' => $mataKuliah->getSifat(),
+            'sks' => $mataKuliah->getSks(),
+            'semester' => $mataKuliah->getSemester()
+        ];
+        $this->db->executePrepared($statement, $params, $type);
     }
 
     private function deleteMataKuliah(MataKuliah $mataKuliah, KurikulumId $kurikulumId) : void
     {
-        // TODO: use self::$deleteMKKurikulum as query
+        $statement = $this->statements[self::$deleteMKKurikulum];
+        $type = $this->types[self::$deleteMKKurikulum];
+        $params = [
+            'id_mk' => $mataKuliah->getId()->id(),
+            'id_kurikulum' => $kurikulumId->id()
+        ];
+        $this->db->executePrepared($statement, $params, $type);
     }
 
     public function save(Kurikulum $kurikulum): void
     {
-        $existing = $this->byId($kurikulum->getId());
-        if (empty($existing)) {
-            $statement = $this->statements[self::$insert];
-        } else {
-            $statement = $this->statements[self::$update];
-        }
-        $type = $this->types[self::$save];
-        $params = [
-            'id' => $kurikulum->getId()->id(),
-            'kode_prodi' => $kurikulum->getProdi()->kode(),
-            'aktif' => $kurikulum->getAktif(),
-            'nama_indonesia' => $kurikulum->getNama()->indonesia(),
-            'nama_inggris' => $kurikulum->getNama()->inggris(),
-            'sks_lulus' => $kurikulum->getSksLulus(),
-            'sks_wajib' => $kurikulum->getSksWajib(),
-            'sks_pilihan' => $kurikulum->getSksPilihan(),
-            'semester_normal'=> $kurikulum->getSemesterNormal(),
-            'tahun_mulai' => $kurikulum->getPeriode()->mulai()->tahun(),
-            'tahun_selesai' => $kurikulum->getPeriode()->selesai()->tahun(),
-            'semester_mulai' => $kurikulum->getSemesterMulai()->semester()
-        ];
-        $success = $this->db->executePrepared($statement, $params, $type);
-        if (!$success) {
+        try {
+            $this->db->begin();
+
+            $existing = $this->byId($kurikulum->getId());
+            if (empty($existing)) {
+                $statement = $this->statements[self::$insert];
+            } else {
+                $statement = $this->statements[self::$update];
+            }
+            $type = $this->types[self::$save];
+            $params = [
+                'id' => $kurikulum->getId()->id(),
+                'kode_prodi' => $kurikulum->getProdi()->kode(),
+                'aktif' => $kurikulum->getAktif(),
+                'nama_indonesia' => $kurikulum->getNama()->indonesia(),
+                'nama_inggris' => $kurikulum->getNama()->inggris(),
+                'sks_lulus' => $kurikulum->getSksLulus(),
+                'sks_wajib' => $kurikulum->getSksWajib(),
+                'sks_pilihan' => $kurikulum->getSksPilihan(),
+                'semester_normal'=> $kurikulum->getSemesterNormal(),
+                'tahun_mulai' => $kurikulum->getPeriode()->mulai()->tahun(),
+                'tahun_selesai' => $kurikulum->getPeriode()->selesai()->tahun(),
+                'semester_mulai' => $kurikulum->getSemesterMulai()->semester()
+            ];
+            $this->db->executePrepared($statement, $params, $type);
+
+            foreach ($kurikulum->getListMataKuliah() as $mataKuliah) {
+                switch ($mataKuliah->getStatus()) {
+                    case MataKuliah::$baru:
+                        $this->saveMataKuliah($mataKuliah, $kurikulum->getId());
+                        break;
+                    case MataKuliah::$ubah:
+                        $this->updateMataKuliah($mataKuliah, $kurikulum->getId());
+                        break;
+                    case MataKuliah::$hapus:
+                        $this->deleteMataKuliah($mataKuliah, $kurikulum->getId());
+                        break;
+                }
+            }
+
+            $this->db->commit();
+
+        } catch (Exception $e) {
+            $this->db->rollback();
             throw new Exception('Failed to save kurikulum');
         }
     }
