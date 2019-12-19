@@ -8,6 +8,7 @@ use Phalcon\Mvc\Controller;
 use Siakad\Kurikulum\Application\HapusKurikulumRequest;
 use Siakad\Kurikulum\Application\KelolaKurikulumRequest;
 use Siakad\Kurikulum\Application\KurikulumNotFoundException;
+use Siakad\Kurikulum\Application\LihatDaftarMataKuliahKurikulumRequest;
 use Siakad\Kurikulum\Application\LihatFormKurikulumRequest;
 use Siakad\Kurikulum\Application\ProgramStudiNotFoundException;
 use Siakad\Kurikulum\Controllers\Validators\KurikulumValidator;
@@ -19,6 +20,7 @@ class KurikulumController extends Controller
     private $kelolaKurikulumService;
     private $formKurikulumService;
     private $hapusKurikulumService;
+    private $daftarMataKuliahKurikulumService;
 
     public function initialize()
     {
@@ -26,7 +28,7 @@ class KurikulumController extends Controller
         $this->kelolaKurikulumService = $this->di->get('kelola_kurikulum_service');
         $this->formKurikulumService = $this->di->get('form_kurikulum_service');
         $this->hapusKurikulumService = $this->di->get('hapus_kurikulum_service');
-
+        $this->daftarMataKuliahKurikulumService = $this->di->get('daftar_mk_kurikulum_service');
     }
 
     public function indexAction()
@@ -139,4 +141,14 @@ class KurikulumController extends Controller
         return $this->response->redirect('kurikulum');
     }
 
+    public function matakuliahAction()
+    {
+        $service = $this->daftarMataKuliahKurikulumService;
+        $id = $this->dispatcher->getParam('id');
+        $request = new LihatDaftarMataKuliahKurikulumRequest($id);
+
+        $response = $service->execute($request);
+        $this->view->kurikulum = $response->kurikulum;
+        return $this->view->pick('kurikulum/matakuliah');
+    }
 }

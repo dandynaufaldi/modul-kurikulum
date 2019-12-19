@@ -9,6 +9,7 @@ use Siakad\Kurikulum\Application\KelolaKurikulumService;
 use Siakad\Kurikulum\Application\KelolaMataKuliahService;
 use Siakad\Kurikulum\Application\KelolaRMKService;
 use Siakad\Kurikulum\Application\LihatDaftarKurikulumService;
+use Siakad\Kurikulum\Application\LihatDaftarMataKuliahKurikulumService;
 use Siakad\Kurikulum\Application\LihatDaftarRMKService;
 use Siakad\Kurikulum\Application\LihatDaftarMataKuliahService;
 use Siakad\Kurikulum\Application\LihatFormKurikulumService;
@@ -119,6 +120,13 @@ $di->set('form_kurikulum_service', function() use ($di) {
 $di->set('hapus_kurikulum_service', function() use ($di) {
     $kurikulumRepository = $di->get('sql_kurikulum_repository');
     return new HapusKurikulumService(
+        $kurikulumRepository
+    );
+});
+
+$di->set('daftar_mk_kurikulum_service', function() use ($di) {
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    return new LihatDaftarMataKuliahKurikulumService(
         $kurikulumRepository
     );
 });

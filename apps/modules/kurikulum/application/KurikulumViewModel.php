@@ -18,6 +18,7 @@ class KurikulumViewModel
     public $sksWajib;
     public $sksPilihan;
     public $aktif;
+    public $listMataKuliah;
 
     public function __construct(
         string $id,
@@ -31,7 +32,8 @@ class KurikulumViewModel
         int $sksLulus,
         int $sksWajib,
         int $sksPilihan,
-        bool $aktif
+        bool $aktif,
+        array $listMataKuliah
     )
     {
         $this->id = $id;
@@ -46,6 +48,11 @@ class KurikulumViewModel
         $this->sksWajib = $sksWajib;
         $this->sksPilihan = $sksPilihan;
         $this->aktif = $aktif;
+
+        $this->listMataKuliah = array();
+        foreach ($listMataKuliah as $mataKuliah) {
+            $this->listMataKuliah[] = MataKuliahViewModel::fromMataKuliah($mataKuliah);
+        }
     }
 
     public static function fromKurikulum(Kurikulum $kurikulum) : KurikulumViewModel
@@ -62,7 +69,8 @@ class KurikulumViewModel
             $kurikulum->getSksLulus(),
             $kurikulum->getSksWajib(),
             $kurikulum->getSksPilihan(),
-            $kurikulum->getAktif()
+            $kurikulum->getAktif(),
+            $kurikulum->getListMataKuliah()
         );
     }
 }

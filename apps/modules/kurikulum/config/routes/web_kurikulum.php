@@ -30,6 +30,13 @@ $router->addPost('/kurikulum/{id}/delete', [
     'action' => 'delete'
 ]);
 
+$router->add('/kurikulum/{id}/matakuliah', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'kurikulum',
+    'action' => 'mataKuliah'
+]);
+
 $router->addGet('/rmk', [
     'namespace' => $namespace,
     'module' => 'kurikulum',

@@ -23,6 +23,8 @@ class MataKuliahViewModel
      * @param string $kode
      * @param RMKViewModel $rmk
      * @param string $deskripsi
+     * @param int $sks
+     * @param int $semester
      */
     public function __construct(
         string $id,
@@ -30,7 +32,9 @@ class MataKuliahViewModel
         string $namaInggris,
         string $kode,
         RMKViewModel $rmk,
-        string $deskripsi
+        string $deskripsi,
+        int $sks,
+        int $semester
     )
     {
         $this->id = $id;
@@ -39,6 +43,8 @@ class MataKuliahViewModel
         $this->kode = $kode;
         $this->rmk = $rmk;
         $this->deskripsi = $deskripsi;
+        $this->sks = $sks;
+        $this->semester = $semester;
     }
 
 
@@ -57,7 +63,9 @@ class MataKuliahViewModel
             $mataKuliah->getNama()->inggris(),
             $mataKuliah->getKode(),
             RMKViewModel::fromRMK($mataKuliah->getRmk()),
-            $mataKuliah->getDeskripsi()
+            $mataKuliah->getDeskripsi(),
+            $mataKuliah->getSks(),
+            $mataKuliah->getSemester()
         );
     }
 
