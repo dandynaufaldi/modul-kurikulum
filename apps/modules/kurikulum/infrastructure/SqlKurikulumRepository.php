@@ -8,10 +8,15 @@ use Phalcon\Db\Column;
 use Siakad\Kurikulum\Domain\Model\Kurikulum;
 use Siakad\Kurikulum\Domain\Model\KurikulumId;
 use Siakad\Kurikulum\Domain\Model\KurikulumRepository;
+use Siakad\Kurikulum\Domain\Model\MataKuliah;
+use Siakad\Kurikulum\Domain\Model\MataKuliahId;
 use Siakad\Kurikulum\Domain\Model\NamaBilingual;
 use Siakad\Kurikulum\Domain\Model\PeriodeTahun;
 use Siakad\Kurikulum\Domain\Model\ProgramStudi;
+use Siakad\Kurikulum\Domain\Model\RMK;
+use Siakad\Kurikulum\Domain\Model\RMKId;
 use Siakad\Kurikulum\Domain\Model\Semester;
+use Siakad\Kurikulum\Domain\Model\SifatMataKuliah;
 use Siakad\Kurikulum\Domain\Model\Tahun;
 use Siakad\Kurikulum\Domain\Model\User;
 use Siakad\Kurikulum\Domain\Model\UserRole;
@@ -109,7 +114,10 @@ class SqlKurikulumRepository implements KurikulumRepository
                     user.id as user_id,
                     user.nama AS user_nama,
                     user.identifier AS user_identifier,
-                    user.level AS user_level
+                    user.level AS user_level,
+                    mk_kurikulum.sks AS mk_kurikulum_sks, 
+                    mk_kurikulum.sifat AS mk_kurikulum_sifat,
+                    mk_kurikulum.semester AS mk_kurikulum_semester
                 FROM mata_kuliah 
                     JOIN rmk ON mata_kuliah.id_rmk = rmk.id
                     JOIN user ON rmk.id_ketua = user.id
@@ -164,11 +172,41 @@ class SqlKurikulumRepository implements KurikulumRepository
         $listResultAssoc = $result->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($listResultAssoc as $resultAssoc) {
-            $mataKuliah = $this->arrayToEntity($resultAssoc);
+            $mataKuliah = $this->arrayToEntityMataKuliah($resultAssoc);
             $listMataKuliah[] = $mataKuliah;
         }
 
         return $listMataKuliah;
+    }
+    
+    private function arrayToEntityMataKuliah(array $data) : MataKuliah
+    {
+        $kaprodi = new User(
+            intval($data['user_id']),
+            $data['user_identifier'],
+            $data['user_nama'],
+            UserRole::make(intval($data['user_level']))
+        );
+
+        $rmk = new RMK(
+            new RMKId($data['rmk_id']),
+            $data['rmk_kode'],
+            new NamaBilingual($data['rmk_nama'], $data['rmk_nama_inggris']),
+            $kaprodi
+        );
+
+        $mataKuliah = new MataKuliah(
+            new MataKuliahId($data['mata_kuliah_id']),
+            $rmk,
+            $data['mata_kuliah_kode'],
+            new NamaBilingual($data['mata_kuliah_nama'], $data['mata_kuliah_nama_inggris']),
+            $data['mata_kuliah_deskripsi'],
+            $data['mk_kurikulum_sks'],
+            new SifatMataKuliah($data['mk_kurikulum_sifat']),
+            $data['mk_kurikulum_semester']
+        );
+
+        return $mataKuliah;
     }
 
     private function arrayToEntity(array $data) : Kurikulum

@@ -18,6 +18,7 @@ class MataKuliah
     private $sks;
     private $sifat;
     private $status;
+    private $semester;
 
     public function __construct(
         MataKuliahId $id,
@@ -27,6 +28,7 @@ class MataKuliah
         string $deskripsi,
         int $sks,
         SifatMataKuliah $sifat,
+        int $semester,
         int $status = 0
     )
     {
@@ -38,6 +40,7 @@ class MataKuliah
         $this->sks = $sks;
         $this->sifat = $sifat;
         $this->status = $status;
+        $this->semester = $semester;
     }
 
     /**
@@ -106,6 +109,14 @@ class MataKuliah
     }
 
     /**
+     * @return int
+     */ 
+    public function getSemester() : int
+    {
+        return $this->semester;
+    }
+
+    /**
      * Set the value of sks
      *
      * @return  self
@@ -137,6 +148,18 @@ class MataKuliah
     public function setStatus(int $status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of semester
+     *
+     * @return  self
+     */ 
+    public function setSemester(int $semester)
+    {
+        $this->semester = $semester;
 
         return $this;
     }
