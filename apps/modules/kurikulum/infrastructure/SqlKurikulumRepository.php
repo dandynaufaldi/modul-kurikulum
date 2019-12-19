@@ -24,6 +24,7 @@ class SqlKurikulumRepository implements KurikulumRepository
     private static $insert = 'insert';
     private static $update = 'update';
     private static $delete = 'delete';
+    private static $fetchMataKuliah = 'fetchMataKuliah';
     
     private $db;
     private $statements;
@@ -93,6 +94,28 @@ class SqlKurikulumRepository implements KurikulumRepository
                 'UPDATE kurikulum
                 SET deleted_at = CURRENT_TIMESTAMP
                 WHERE id = :id'
+            ),
+            self::$fetchMataKuliah => $this->db->prepare(
+                'SELECT
+                    mata_kuliah.id as mata_kuliah_id,
+                    mata_kuliah.kode_matkul as mata_kuliah_kode,
+                    mata_kuliah.nama as mata_kuliah_nama,
+                    mata_kuliah.nama_inggris as mata_kuliah_nama_inggris,
+                    mata_kuliah.deskripsi as mata_kuliah_deskripsi,
+                    rmk.id as rmk_id,
+                    rmk.kode_rmk as rmk_kode,
+                    rmk.nama as rmk_nama,
+                    rmk.nama_inggris as rmk_nama_inggris,
+                    user.id as user_id,
+                    user.nama AS user_nama,
+                    user.identifier AS user_identifier,
+                    user.level AS user_level
+                FROM mata_kuliah 
+                    JOIN rmk ON mata_kuliah.id_rmk = rmk.id
+                    JOIN user ON rmk.id_ketua = user.id
+                    JOIN mk_kurikulum ON mata_kuliah.id = mk_kurikulum.id_mk
+                WHERE mata_kuliah.deleted_at IS NULL 
+                AND mk_kurikulum.id_kurikulum = :id'
             )
         ];
     }
@@ -121,8 +144,31 @@ class SqlKurikulumRepository implements KurikulumRepository
             self::$save => $allColumn,
             self::$delete => [
                 'id' => Column::BIND_PARAM_STR
+            ],
+            self::$fetchMataKuliah => [
+                'id' => Column::BIND_PARAM_STR
             ]
         ];
+    }
+
+    private function fetchMataKuliah(string $id) : array
+    {
+        $listMataKuliah = array();
+        $statement = $this->statements[self::$fetchMataKuliah];
+        $type = $this->types[self::$fetchMataKuliah];
+        $params = [
+            'id' => $id
+        ];
+
+        $result = $this->db->executePrepared($statement, $params, $type);
+        $listResultAssoc = $result->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($listResultAssoc as $resultAssoc) {
+            $mataKuliah = $this->arrayToEntity($resultAssoc);
+            $listMataKuliah[] = $mataKuliah;
+        }
+
+        return $listMataKuliah;
     }
 
     private function arrayToEntity(array $data) : Kurikulum
@@ -158,6 +204,7 @@ class SqlKurikulumRepository implements KurikulumRepository
                         new Tahun(intval($data['kurikulum_tahun_selesai']))
                     ))
                     ->semesterMulai(new Semester($data['kurikulum_semester_mulai']))
+                    ->listMataKuliah($this->fetchMataKuliah($data['kurikulum_id']))
                     ->build();
         if ($aktif) {
             $kurikulum->aktif();

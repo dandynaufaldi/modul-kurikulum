@@ -20,7 +20,7 @@ class SifatMataKuliah
     {
         $sifat = strtolower($sifat);
         if(!SifatMataKuliah::validate($sifat)) {
-            throw new UnrecognizedSifatMataKuliahException("Invalid sifat semester value");
+            throw new UnrecognizedSifatMataKuliahException("Invalid sifat mata kuliah value");
         }
         $this->sifat = $sifat;
     }
