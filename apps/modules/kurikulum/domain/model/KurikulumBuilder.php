@@ -17,11 +17,13 @@ class KurikulumBuilder
     private $semesterNormal = NULL;
     private $periode = NULL;
     private $semesterMulai = NULL;
+    private $listMataKuliah = NULL;
 
     public function __construct()
     {
         $this->aktif = false;
         $this->id = new KurikulumId();
+        $this->listMataKuliah = array();
     }
 
     public function id(KurikulumId $id)
@@ -81,6 +83,12 @@ class KurikulumBuilder
     public function aktif($aktif) : self
     {
         $this->aktif = boolval($aktif);
+        return $this;
+    }
+
+    public function listMataKuliah(array $listMataKuliah) : self
+    {
+        $this->listMataKuliah = $listMataKuliah;
         return $this;
     }
 

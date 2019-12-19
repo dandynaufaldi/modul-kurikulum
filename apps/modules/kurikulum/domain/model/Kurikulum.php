@@ -16,6 +16,7 @@ class Kurikulum
     private $semesterNormal;
     private $periode;
     private $semesterMulai;
+    private $listMataKuliah;
 
     public function __construct(
         KurikulumId $id,
@@ -27,6 +28,7 @@ class Kurikulum
         int $semesterNormal,
         PeriodeTahun $periode,
         Semester $semesterMulai,
+        array $listMataKuliah = array(),
         $aktif = false
     )
     {
@@ -43,6 +45,7 @@ class Kurikulum
         $this->periode = $periode;
         $this->semesterMulai = $semesterMulai;
         $this->aktif = $aktif;
+        $this->listMataKuliah = $listMataKuliah;
     }
 
     public static function validateAktifPeriode(bool $aktif, PeriodeTahun $periode) : bool
@@ -169,5 +172,36 @@ class Kurikulum
         return $this;
     }
 
-    // public function
+    public function getListMataKuliah() : array
+    {
+        return $this->listMataKuliah;
+    }
+
+    public function kelolaMataKuliah(MataKuliah $mataKuliah)
+    {
+        $found = false;
+        foreach ($this->listMataKuliah as $existingMK) {
+            if ($mataKuliah->getId()->isEqual($existingMK->getId())){
+                $existingMK->setSifat($mataKuliah->getSifat());
+                $existingMK->setSks($mataKuliah->getSks());
+                $existingMK->setStatus(MataKuliah::$ubah);
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            $mataKuliah->setStatus(MataKuliah::$baru);
+            $this->listMataKuliah[] = $mataKuliah;
+        }
+    }
+
+    public function hapusMataKuliah(MataKuliah $mataKuliah)
+    {
+        foreach ($this->listMataKuliah as $existingMK) {
+            if ($mataKuliah->getId()->isEqual($existingMK->getId())) {
+                $existingMK->setStatus(MataKuliah::$hapus);
+                break;
+            }
+        }
+    }
 }

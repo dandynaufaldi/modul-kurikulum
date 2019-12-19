@@ -4,6 +4,12 @@ namespace Siakad\Kurikulum\Domain\Model;
 
 class MataKuliah
 {
+
+    public static $tetap = 0;
+    public static $baru = 1;
+    public static $ubah = 2;
+    public static $hapus = 3;
+
     private $id;
     private $rmk;
     private $kode;
@@ -11,6 +17,7 @@ class MataKuliah
     private $deskripsi;
     private $sks;
     private $sifat;
+    private $status;
 
     public function __construct(
         MataKuliahId $id,
@@ -19,7 +26,8 @@ class MataKuliah
         NamaBilingual $nama,
         string $deskripsi,
         int $sks,
-        SifatMataKuliah $sifat
+        SifatMataKuliah $sifat,
+        int $status = 0
     )
     {
         $this->id = $id;
@@ -29,6 +37,7 @@ class MataKuliah
         $this->deskripsi = $deskripsi;
         $this->sks = $sks;
         $this->sifat = $sifat;
+        $this->status = $status;
     }
 
     /**
@@ -87,4 +96,48 @@ class MataKuliah
         return $this->sifat;
     }
 
+
+    /**
+     * @return int
+     */ 
+    public function getStatus() : int
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the value of sks
+     *
+     * @return  self
+     */ 
+    public function setSks(int $sks)
+    {
+        $this->sks = $sks;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of sifat
+     *
+     * @return  self
+     */ 
+    public function setSifat(SifatMataKuliah $sifat)
+    {
+        $this->sifat = $sifat;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of status
+     *
+     * @return  self
+     */ 
+    public function setStatus(int $status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
 }
