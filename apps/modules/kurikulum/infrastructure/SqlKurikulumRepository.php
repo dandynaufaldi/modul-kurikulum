@@ -30,6 +30,12 @@ class SqlKurikulumRepository implements KurikulumRepository
     private static $update = 'update';
     private static $delete = 'delete';
     private static $fetchMataKuliah = 'fetchMataKuliah';
+    private static $fetchMataKuliahById = 'fetchMataKuliahById';
+    private static $insertMK = 'insertMK';
+    private static $addMKKurikulum = 'addMKKurikulum';
+    private static $saveMKKurikulum = 'saveMKKurikulum';
+    private static $deleteMKKurikulum = 'deleteMKKurikulum';
+    private static $updateMKKurikulum = 'updateMKKurikulum';
     
     private $db;
     private $statements;
@@ -68,6 +74,31 @@ class SqlKurikulumRepository implements KurikulumRepository
             JOIN prodi ON kurikulum.kode_prodi = prodi.kode 
             JOIN user ON user.id = prodi.id_kaprodi
         WHERE kurikulum.deleted_at IS NULL';
+
+        $queryMKKurikulumAll = 'SELECT
+            mata_kuliah.id as mata_kuliah_id,
+            mata_kuliah.kode_matkul as mata_kuliah_kode,
+            mata_kuliah.nama as mata_kuliah_nama,
+            mata_kuliah.nama_inggris as mata_kuliah_nama_inggris,
+            mata_kuliah.deskripsi as mata_kuliah_deskripsi,
+            rmk.id as rmk_id,
+            rmk.kode_rmk as rmk_kode,
+            rmk.nama as rmk_nama,
+            rmk.nama_inggris as rmk_nama_inggris,
+            user.id as user_id,
+            user.nama AS user_nama,
+            user.identifier AS user_identifier,
+            user.level AS user_level,
+            mk_kurikulum.sks AS mk_kurikulum_sks, 
+            mk_kurikulum.sifat AS mk_kurikulum_sifat,
+            mk_kurikulum.semester AS mk_kurikulum_semester
+        FROM mata_kuliah 
+            JOIN rmk ON mata_kuliah.id_rmk = rmk.id
+            JOIN user ON rmk.id_ketua = user.id
+            JOIN mk_kurikulum ON mata_kuliah.id = mk_kurikulum.id_mk
+        WHERE mata_kuliah.deleted_at IS NULL 
+        AND mk_kurikulum.deleted_at IS NULL
+        AND mk_kurikulum.id_kurikulum = :id_kurikulum';
         
         $this->statements = [
             self::$all => $this->db->prepare(
@@ -101,29 +132,32 @@ class SqlKurikulumRepository implements KurikulumRepository
                 WHERE id = :id'
             ),
             self::$fetchMataKuliah => $this->db->prepare(
-                'SELECT
-                    mata_kuliah.id as mata_kuliah_id,
-                    mata_kuliah.kode_matkul as mata_kuliah_kode,
-                    mata_kuliah.nama as mata_kuliah_nama,
-                    mata_kuliah.nama_inggris as mata_kuliah_nama_inggris,
-                    mata_kuliah.deskripsi as mata_kuliah_deskripsi,
-                    rmk.id as rmk_id,
-                    rmk.kode_rmk as rmk_kode,
-                    rmk.nama as rmk_nama,
-                    rmk.nama_inggris as rmk_nama_inggris,
-                    user.id as user_id,
-                    user.nama AS user_nama,
-                    user.identifier AS user_identifier,
-                    user.level AS user_level,
-                    mk_kurikulum.sks AS mk_kurikulum_sks, 
-                    mk_kurikulum.sifat AS mk_kurikulum_sifat,
-                    mk_kurikulum.semester AS mk_kurikulum_semester
-                FROM mata_kuliah 
-                    JOIN rmk ON mata_kuliah.id_rmk = rmk.id
-                    JOIN user ON rmk.id_ketua = user.id
-                    JOIN mk_kurikulum ON mata_kuliah.id = mk_kurikulum.id_mk
-                WHERE mata_kuliah.deleted_at IS NULL 
-                AND mk_kurikulum.id_kurikulum = :id'
+                $queryMKKurikulumAll
+            ),
+            self::$fetchMataKuliahById => $this->db->prepare(
+                $queryMKKurikulumAll . ' AND mk_kurikulum.id_mk = :id_mk'
+            ),
+            self::$insertMK => $this->db->prepare(
+                'INSERT INTO mata_kuliah 
+                (id, id_rmk, kode_matkul, nama, nama_inggris, deskripsi) 
+                VALUES 
+                (:id, :id_rmk, :kode_matkul, :nama, :nama_inggris, :deskripsi)'
+            ),
+            self::$addMKKurikulum => $this->db->prepare(
+                'INSERT INTO mk_kurikulum
+                (id_mk, id_kurikulum, sifat, sks, semester)
+                VALUES
+                (:id_mk, :id_kurikulum, :sifat, :sks, :semester)'
+            ),
+            self::$deleteMKKurikulum => $this->db->prepare(
+                'UPDATE mk_kurikulum
+                SET deleted_at = CURRENT_TIMESTAMP
+                WHERE id_mk = :id_mk AND id_kurikulum = :id_kurikulum'
+            ),
+            self::$updateMKKurikulum => $this->db->prepare(
+                'UPDATE mk_kurikulum
+                SET sifat = :sifat, sks = :sks, semester = :semester
+                WHERE id_mk = :id_mk AND id_kurikulum = :id_kurikulum'
             )
         ];
     }
@@ -154,7 +188,30 @@ class SqlKurikulumRepository implements KurikulumRepository
                 'id' => Column::BIND_PARAM_STR
             ],
             self::$fetchMataKuliah => [
-                'id' => Column::BIND_PARAM_STR
+                'id_kurikulum' => Column::BIND_PARAM_STR
+            ],
+            self::$fetchMataKuliahById => [
+                'id_kurikulum' => Column::BIND_PARAM_STR,
+                'id_mk' => Column::BIND_PARAM_STR
+            ],
+            self::$insertMK => [
+                'id' => Column::BIND_PARAM_STR,
+                'id_rmk' => Column::BIND_PARAM_STR,
+                'kode_matkul' => Column::BIND_PARAM_STR,
+                'nama' => Column::BIND_PARAM_STR,
+                'nama_inggris' => Column::BIND_PARAM_STR,
+                'deskripsi' => Column::BIND_PARAM_STR
+            ],
+            self::$saveMKKurikulum => [
+                'id_mk' => Column::BIND_PARAM_STR,
+                'id_kurikulum' => Column::BIND_PARAM_STR,
+                'sifat' => Column::BIND_PARAM_STR,
+                'sks' => Column::BIND_PARAM_INT,
+                'semester' => Column::BIND_PARAM_INT
+            ],
+            self::$deleteMKKurikulum => [
+                'id_mk' => Column::BIND_PARAM_STR,
+                'id_kurikulum' => Column::BIND_PARAM_STR
             ]
         ];
     }
@@ -165,7 +222,7 @@ class SqlKurikulumRepository implements KurikulumRepository
         $statement = $this->statements[self::$fetchMataKuliah];
         $type = $this->types[self::$fetchMataKuliah];
         $params = [
-            'id' => $id
+            'id_kurikulum' => $id
         ];
 
         $result = $this->db->executePrepared($statement, $params, $type);
@@ -177,6 +234,23 @@ class SqlKurikulumRepository implements KurikulumRepository
         }
 
         return $listMataKuliah;
+    }
+
+    private function fetchMataKuliahById(KurikulumId $kurikulumId, MataKuliahId $mataKuliahId) : ?MataKuliah
+    {
+        $statement = $this->statements[self::$fetchMataKuliahById];
+        $type = $this->types[self::$fetchMataKuliahById];
+        $params = [
+            'id_kurikulum' => $kurikulumId->id(),
+            'id_mk' => $mataKuliahId->id()
+        ];
+        $result = $this->db->executePrepared($statement, $params, $type);
+        
+        if ($result->rowCount() == 0) {
+            return null;
+        }
+        $mataKuliah = $this->arrayToEntityMataKuliah($result->fetch(PDO::FETCH_ASSOC));
+        return $mataKuliah;
     }
     
     private function arrayToEntityMataKuliah(array $data) : MataKuliah
@@ -281,6 +355,25 @@ class SqlKurikulumRepository implements KurikulumRepository
         }
         $kurikulum = $this->arrayToEntity($result->fetch(PDO::FETCH_ASSOC));
         return $kurikulum;
+    }
+
+    private function saveMataKuliah(MataKuliah $mataKuliah, KurikulumId $kurikulumId) : void
+    {
+        $exist = $this->fetchMataKuliahById($kurikulumId, $mataKuliah->getId());
+        if (!$exist) {
+            // TODO: insert new MK to mata_kuliah self::$insertMK
+        }
+        // TODO: add MK relation to mk_kur self::$addMKKurikulum
+    }
+
+    private function updateMataKuliah(MataKuliah $mataKuliah, KurikulumId $kurikulumId) : void
+    {
+        // TODO: use self::$updateMKKurikulum as query
+    }
+
+    private function deleteMataKuliah(MataKuliah $mataKuliah, KurikulumId $kurikulumId) : void
+    {
+        // TODO: use self::$deleteMKKurikulum as query
     }
 
     public function save(Kurikulum $kurikulum): void
