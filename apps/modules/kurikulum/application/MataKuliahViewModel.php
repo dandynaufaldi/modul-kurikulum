@@ -5,6 +5,7 @@ namespace Siakad\Kurikulum\Application;
 
 
 use Siakad\Kurikulum\Domain\Model\MataKuliah;
+use Siakad\Kurikulum\Domain\Model\SifatMataKuliah;
 
 class MataKuliahViewModel
 {
@@ -14,6 +15,9 @@ class MataKuliahViewModel
     public $kode;
     public $rmk;
     public $deskripsi;
+    public $sks;
+    public $semester;
+    public $sifat;
 
     /**
      * MataKuliahViewModel constructor.
@@ -25,6 +29,7 @@ class MataKuliahViewModel
      * @param string $deskripsi
      * @param int $sks
      * @param int $semester
+     * @param int $sifat
      */
     public function __construct(
         string $id,
@@ -34,7 +39,8 @@ class MataKuliahViewModel
         RMKViewModel $rmk,
         string $deskripsi,
         int $sks,
-        int $semester
+        int $semester,
+        SifatMataKuliah $sifat
     )
     {
         $this->id = $id;
@@ -45,6 +51,7 @@ class MataKuliahViewModel
         $this->deskripsi = $deskripsi;
         $this->sks = $sks;
         $this->semester = $semester;
+        $this->sifat = $sifat;
     }
 
 
@@ -65,7 +72,8 @@ class MataKuliahViewModel
             RMKViewModel::fromRMK($mataKuliah->getRmk()),
             $mataKuliah->getDeskripsi(),
             $mataKuliah->getSks(),
-            $mataKuliah->getSemester()
+            $mataKuliah->getSemester(),
+            $mataKuliah->getSifat()
         );
     }
 
