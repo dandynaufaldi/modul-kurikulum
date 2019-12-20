@@ -192,4 +192,9 @@ class KurikulumController extends Controller
             $this->flashSession->error('Internal server error');
         }
     }
+
+    public function editMataKuliahAction()
+    {
+        // TODO: lihat form MK kurikulum (kurID, MK_ID)
+    }
 }

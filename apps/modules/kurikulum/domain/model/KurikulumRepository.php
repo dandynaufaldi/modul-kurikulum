@@ -8,4 +8,5 @@ interface KurikulumRepository
     public function all() : array;
     public function save(Kurikulum $kurikulum) : void;
     public function delete(KurikulumId $kurikulumId) : void;
+    public function fetchMataKuliahById(KurikulumId $kurikulumId, MataKuliahId $mataKuliahId) : ?MataKuliah;
 }

@@ -236,7 +236,7 @@ class SqlKurikulumRepository implements KurikulumRepository
         return $listMataKuliah;
     }
 
-    private function fetchMataKuliahById(KurikulumId $kurikulumId, MataKuliahId $mataKuliahId) : ?MataKuliah
+    public function fetchMataKuliahById(KurikulumId $kurikulumId, MataKuliahId $mataKuliahId) : ?MataKuliah
     {
         $statement = $this->statements[self::$fetchMataKuliahById];
         $type = $this->types[self::$fetchMataKuliahById];
