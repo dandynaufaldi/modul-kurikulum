@@ -40,6 +40,7 @@ class HapusMataKuliahKurikulumService
         }
 
         $kurikulum->hapusMataKuliah($mataKuliah);
+        $this->kurikulumRepository->save($kurikulum);
     }
 
 

@@ -6,6 +6,7 @@ use Exception;
 use InvalidArgumentException;
 use Phalcon\Mvc\Controller;
 use Siakad\Kurikulum\Application\HapusKurikulumRequest;
+use Siakad\Kurikulum\Application\HapusMataKuliahKurikulumRequest;
 use Siakad\Kurikulum\Application\KelolaKurikulumRequest;
 use Siakad\Kurikulum\Application\KelolaMataKuliahKurikulumRequest;
 use Siakad\Kurikulum\Application\KurikulumNotFoundException;
@@ -197,11 +198,12 @@ class KurikulumController extends Controller
     {
         $kurikulumId = $this->request->getPost('kurikulum_id');
         $mataKuliahId = $this->request->getPost('matakuliah_id');
-
+        
+        $request = new HapusMataKuliahKurikulumRequest($kurikulumId, $mataKuliahId);
         $service = $this->hapusMataKuliahKurikulumService;
 
         try {
-            $service->execute($kurikulumId, $mataKuliahId);
+            $service->execute($request);
             $this->flashSession->success('Berhasil menghapus matakuliah dari kurikulum');
         } catch (KurikulumNotFoundException $e) {
             $this->flashSession->error($e->getMessage());
@@ -210,6 +212,7 @@ class KurikulumController extends Controller
         } catch (Exception $e) {
             $this->flashSession->error('Internal server error');
         }
+        return $this->response->redirect("kurikulum/{$kurikulumId}/matakuliah");
     }
 
     public function editMataKuliahAction()

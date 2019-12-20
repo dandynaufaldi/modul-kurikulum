@@ -58,6 +58,13 @@ $router->add('/kurikulum/{id}/matakuliah/edit/{id_mk}', [
     'action' => 'editMataKuliah'
 ]);
 
+$router->addPost('/kurikulum/{id}/matakuliah/delete/{id_mk}', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'kurikulum',
+    'action' => 'hapusMataKuliahKurikulum'
+]);
+
 $router->addGet('/rmk', [
     'namespace' => $namespace,
     'module' => 'kurikulum',

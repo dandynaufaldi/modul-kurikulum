@@ -51,8 +51,9 @@
                     <a href="{{ url('kurikulum/' ~ kurikulum.id ~'/matakuliah/edit/' ~ matakuliah.id) }}" class="btn btn-info btn-sm" role="button">Edit</a>
                 </div>
                 <div class="pull-right">
-                    {{ form('mata-kuliah/' ~ matakuliah.id ~ '/delete', 'method': 'POST', 'onsubmit' : "return confirm('Apakah yakin untuk menghapus " ~ matakuliah.namaIndonesia ~ "?')")}}
-                        {{ hidden_field('id', 'value': matakuliah.id ) }}
+                    {{ form('kurikulum/' ~ kurikulum.id ~ '/matakuliah/delete/' ~ matakuliah.id, 'method': 'POST', 'onsubmit' : "return confirm('Apakah yakin untuk menghapus " ~ matakuliah.namaIndonesia ~ "?')")}}
+                        {{ hidden_field('matakuliah_id', 'value': matakuliah.id ) }}
+                        {{ hidden_field('kurikulum_id', 'value': kurikulum.id ) }}
                         {{ submit_button('Hapus', 'type': 'button', 'class': 'btn btn-danger btn-sm') }}
                     {{ end_form() }}
                 </div>
