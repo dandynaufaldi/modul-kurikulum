@@ -51,7 +51,7 @@ class MataKuliahViewModel
         $this->deskripsi = $deskripsi;
         $this->sks = $sks;
         $this->semester = $semester;
-        $this->sifat = $sifat;
+        $this->sifat = $sifat->sifat();
     }
 
 

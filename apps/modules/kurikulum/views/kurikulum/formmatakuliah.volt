@@ -20,23 +20,27 @@
         <div class="col-md-6">
             <div class='form-group'>
                 <label for='kode_rmk'>RMK</label>
+                {% if listRmk is defined %}
                 <select class="form-control" name="kode_rmk" required>
                     {% for rmk in listRmk %}
                         <option value="{{ rmk.kode }}" {% if mataKuliah and rmk.kode == mataKuliah.rmk.kode %} selected {% endif %}>{{ rmk.namaIndonesia }}</option>
                     {% endfor %}
                 </select>
+                {% else %}
+                <input type="text" class="form-control" id="kode_rmk" name="kode_rmk" required {% if mataKuliah %}readonly value="{{ mataKuliah.rmk.kode }}"{% endif %}>
+                {% endif %}
             </div>
             <div class='form-group'>
                 <label for='kode_mata_kuliah'>Kode Mata Kuliah</label>
-                <input type="text" class="form-control" id="kode_mata_kuliah" name="kode_mata_kuliah" required {% if mataKuliah %}value="{{ mataKuliah.kode }}"{% endif %}>
+                <input type="text" class="form-control" id="kode_mata_kuliah" name="kode_mata_kuliah" required {% if mataKuliah %}readonly value="{{ mataKuliah.kode }}"{% endif %}>
             </div>
             <div class='form-group'>
                 <label for='nama_indonesia'>Nama Mata Kuliah</label>
-                <input type="text" class="form-control" id="nama_indonesia" name="nama_indonesia" required {% if mataKuliah %}value="{{ mataKuliah.namaIndonesia }}"{% endif %}>
+                <input type="text" class="form-control" id="nama_indonesia" name="nama_indonesia" required {% if mataKuliah %}readonly value="{{ mataKuliah.namaIndonesia }}"{% endif %}>
             </div>
             <div class='form-group'>
                 <label for='nama_inggris'>Nama Inggris</label>
-                <input type="text" class="form-control" id="nama_inggris" name="nama_inggris" required {% if mataKuliah %}value="{{ mataKuliah.namaInggris }}"{% endif %}>
+                <input type="text" class="form-control" id="nama_inggris" name="nama_inggris" required {% if mataKuliah %}readonly value="{{ mataKuliah.namaInggris }}"{% endif %}>
             </div>
             <div class='form-group'>
                 <label for='nama_inggris'>SKS</label>
@@ -48,13 +52,13 @@
             </div>
             <div class='form-group'>
                 <label for='deskripsi'>Deskripsi</label>
-                <textarea type="text" class="form-control" id="deskripsi" name="deskripsi" required>{% if mataKuliah %}{{ mataKuliah.deskripsi }}{% endif %}</textarea>
+                <textarea type="text" class="form-control" id="deskripsi" name="deskripsi" required {% if mataKuliah %}readonly{% endif %}>{% if mataKuliah %}{{ mataKuliah.deskripsi }}{% endif %}</textarea>
             </div>
             <div class='form-group'>
                 <label for='sifat'>Sifat</label>
                 <select class="form-control" name="sifat" required>
-                    <option value="wajib">Wajib</option>
-                    <option value="pilihan">Pilihan</option>
+                    <option value="wajib" {% if mataKuliah and mataKuliah.sifat == 'wajib' %} selected {% endif %}>Wajib</option>
+                    <option value="pilihan" {% if mataKuliah and mataKuliah.sifat == 'pilihan' %} selected {% endif %}>Pilihan</option>
                 </select>
             </div>
             {{ submit_button('Simpan', 'type': 'button', 'class': 'btn btn-primary btn-sm') }}

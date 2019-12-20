@@ -14,6 +14,7 @@ use Siakad\Kurikulum\Application\LihatDaftarMataKuliahKurikulumService;
 use Siakad\Kurikulum\Application\LihatDaftarRMKService;
 use Siakad\Kurikulum\Application\LihatDaftarMataKuliahService;
 use Siakad\Kurikulum\Application\LihatFormKurikulumService;
+use Siakad\Kurikulum\Application\LihatFormMataKuliahKurikulumService;
 use Siakad\Kurikulum\Application\LihatFormMataKuliahService;
 use Siakad\Kurikulum\Application\LihatFormRMKService;
 use Siakad\Kurikulum\Infrastructure\SqlKurikulumRepository;
@@ -203,5 +204,15 @@ $di->set('hapus_mata_kuliah_kurikulum_service', function() use ($di) {
     return new HapusMataKuliahKurikulumService(
         $kurikulumRepository,
         $mataKuliahRepository
+    );
+});
+
+$di->set('form_mata_kuliah_kurikulum_service', function() use ($di) {
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    $rmkRepository = $di->get('sql_rmk_repository');
+
+    return new LihatFormMataKuliahKurikulumService(
+        $kurikulumRepository,
+        $rmkRepository
     );
 });

@@ -10,6 +10,7 @@ use Siakad\Kurikulum\Application\KelolaKurikulumRequest;
 use Siakad\Kurikulum\Application\KurikulumNotFoundException;
 use Siakad\Kurikulum\Application\LihatDaftarMataKuliahKurikulumRequest;
 use Siakad\Kurikulum\Application\LihatFormKurikulumRequest;
+use Siakad\Kurikulum\Application\LihatFormMataKuliahKurikulumRequest;
 use Siakad\Kurikulum\Application\MataKuliahNotFoundException;
 use Siakad\Kurikulum\Application\ProgramStudiNotFoundException;
 use Siakad\Kurikulum\Controllers\Validators\KurikulumValidator;
@@ -24,6 +25,7 @@ class KurikulumController extends Controller
     private $daftarMataKuliahKurikulumService;
     private $daftarMataKuliahService;
     private $hapusMataKuliahKurikulumService;
+    private $formMataKuliahKurikulumService;
 
     public function initialize()
     {
@@ -34,6 +36,7 @@ class KurikulumController extends Controller
         $this->daftarMataKuliahKurikulumService = $this->di->get('daftar_mk_kurikulum_service');
         $this->daftarMataKuliahService = $this->di->get('daftar_mata_kuliah_service');
         $this->hapusMataKuliahKurikulumService = $this->di->get('hapus_mata_kuliah_kurikulum_service');
+        $this->formMataKuliahKurikulumService = $this->di->get('form_mata_kuliah_kurikulum_service');
     }
 
     public function indexAction()
@@ -195,6 +198,28 @@ class KurikulumController extends Controller
 
     public function editMataKuliahAction()
     {
-        // TODO: lihat form MK kurikulum (kurID, MK_ID)
+        if ($this->request->isPost()) {
+            $this->handleFormMataKuliahKurikulum();
+        }
+        $id_kurikulum = $this->dispatcher->getParam('id');
+        $id_matakuliah = $this->dispatcher->getParam('id_mk');
+        $request = new LihatFormMataKuliahKurikulumRequest($id_kurikulum, $id_matakuliah);
+        $service = $this->formMataKuliahKurikulumService;
+        try {
+            $response = $service->execute($request);
+            $this->view->mataKuliah = $response->mataKuliah;
+            $this->view->kurikulum_id = $response->kurikulumId;
+            $this->view->action = "/kurikulum/{$id_kurikulum}/matakuliah/edit/{$id_matakuliah}";
+            return $this->view->pick('kurikulum/formmatakuliah');
+        } catch (MataKuliahNotFoundException $e) {
+            $this->flashSession->error($e->getMessage());
+        } catch (Exception $e) {
+            $this->flashSession->error('Internal server error');
+        }
+    }
+
+    private function handleFormMataKuliahKurikulum()
+    {
+
     }
 }

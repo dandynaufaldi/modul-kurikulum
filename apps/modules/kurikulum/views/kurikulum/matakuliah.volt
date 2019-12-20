@@ -48,7 +48,7 @@
             <td>{{ matakuliah.deskripsi }}</td>
             <td>
                 <div class="pull-left">
-                    <a href="{{ url('mata-kuliah/' ~ matakuliah.id ~'/edit') }}" class="btn btn-info btn-sm" role="button">Edit</a>
+                    <a href="{{ url('kurikulum/' ~ kurikulum.id ~'/matakuliah/edit/' ~ matakuliah.id) }}" class="btn btn-info btn-sm" role="button">Edit</a>
                 </div>
                 <div class="pull-right">
                     {{ form('mata-kuliah/' ~ matakuliah.id ~ '/delete', 'method': 'POST', 'onsubmit' : "return confirm('Apakah yakin untuk menghapus " ~ matakuliah.namaIndonesia ~ "?')")}}
