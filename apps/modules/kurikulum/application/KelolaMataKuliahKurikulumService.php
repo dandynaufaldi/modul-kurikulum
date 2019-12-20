@@ -3,18 +3,27 @@
 namespace Siakad\Kurikulum\Application;
 
 use Siakad\Kurikulum\Domain\Model\KurikulumRepository;
+use Siakad\Kurikulum\Domain\Model\MataKuliah;
+use Siakad\Kurikulum\Domain\Model\NamaBilingual;
+use Siakad\Kurikulum\Domain\Model\RMKRepository;
+use Siakad\Kurikulum\Domain\Model\SifatMataKuliah;
 
 class KelolaMataKuliahKurikulumService
 {
     private $kurikulumRepository;
+    private $rmkRepository;
 
     /**
      * KelolaMataKuliahKurikulumService constructor.
      * @param $kurikulumRepository
      */
-    public function __construct(KurikulumRepository $kurikulumRepository)
+    public function __construct(
+        KurikulumRepository $kurikulumRepository,
+        RMKRepository $rmkRepository
+    )
     {
         $this->kurikulumRepository = $kurikulumRepository;
+        $this->rmkRepository = $rmkRepository;
     }
 
     public function execute(KelolaMataKuliahKurikulumRequest $request)
@@ -25,8 +34,23 @@ class KelolaMataKuliahKurikulumService
         }
 
         $mataKuliah = $this->kurikulumRepository->fetchMataKuliahById($kurikulum->getId(), $request->mataKuliahId);
+        $rmk = $this->rmkRepository->byKode($request->kodeRMK);
+
         if(empty($mataKuliah)) {
-            // TODO create Matkul?
+            $mataKuliah = new MataKuliah(
+                $request->mataKuliahId,
+                $rmk,
+                $request->kodeMataKuliah,
+                new NamaBilingual(
+                    $request->namaIndonesia,
+                    $request->namaInggris
+                ),
+                $request->deskripsi,
+                $request->sks,
+                new SifatMataKuliah(
+                    $request->sifat
+                )
+            );
         } else {
             // TODO edit matkul?
         }

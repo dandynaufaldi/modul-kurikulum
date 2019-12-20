@@ -15,7 +15,8 @@
     </div>
     <br>
     {{ form(action, 'method': 'POST')}}
-    <input type="hidden" class="form-control" id="id" name="id" {% if mataKuliah %}value="{{ mataKuliah.id }}"{% endif %}>
+    <input type="hidden" class="form-control" id="kurikulum_id" name="kurikulum_id" value="{{ kurikulum_id }}">
+    <input type="hidden" class="form-control" id="mata_kuliah_id" name="matakuliah_id" {% if mataKuliah %}value="{{ mataKuliah.id }}"{% endif %}>
     <div class="row">
         <div class="col-md-6">
             <div class='form-group'>
@@ -43,11 +44,11 @@
                 <input type="text" class="form-control" id="nama_inggris" name="nama_inggris" required {% if mataKuliah %}readonly value="{{ mataKuliah.namaInggris }}"{% endif %}>
             </div>
             <div class='form-group'>
-                <label for='nama_inggris'>SKS</label>
+                <label for='sks'>SKS</label>
                 <input type="number" class="form-control" id="sks" name="sks" required {% if mataKuliah %}value="{{ mataKuliah.sks }}"{% endif %}>
             </div>
             <div class='form-group'>
-                <label for='nama_inggris'>Semester</label>
+                <label for='semester'>Semester</label>
                 <input type="number" class="form-control" id="semester" name="semester" required {% if mataKuliah %}value="{{ mataKuliah.semester }}"{% endif %}>
             </div>
             <div class='form-group'>

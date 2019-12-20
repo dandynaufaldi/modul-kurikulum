@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Phalcon\Mvc\Controller;
 use Siakad\Kurikulum\Application\HapusKurikulumRequest;
 use Siakad\Kurikulum\Application\KelolaKurikulumRequest;
+use Siakad\Kurikulum\Application\KelolaMataKuliahKurikulumRequest;
 use Siakad\Kurikulum\Application\KurikulumNotFoundException;
 use Siakad\Kurikulum\Application\LihatDaftarMataKuliahKurikulumRequest;
 use Siakad\Kurikulum\Application\LihatFormKurikulumRequest;
@@ -26,6 +27,7 @@ class KurikulumController extends Controller
     private $daftarMataKuliahService;
     private $hapusMataKuliahKurikulumService;
     private $formMataKuliahKurikulumService;
+    private $kelolaMataKuliahKurikulumService;
 
     public function initialize()
     {
@@ -37,6 +39,7 @@ class KurikulumController extends Controller
         $this->daftarMataKuliahService = $this->di->get('daftar_mata_kuliah_service');
         $this->hapusMataKuliahKurikulumService = $this->di->get('hapus_mata_kuliah_kurikulum_service');
         $this->formMataKuliahKurikulumService = $this->di->get('form_mata_kuliah_kurikulum_service');
+        $this->kelolaMataKuliahKurikulumService = $this->di->get('kelola_mata_kuliah_kurikulum_service');
     }
 
     public function indexAction()
@@ -185,7 +188,7 @@ class KurikulumController extends Controller
         $response = $service->execute($request);
         $this->view->kurikulum_id = $response->kurikulumId;
         $this->view->mataKuliah = $response->mataKuliah;
-        $this->view->action = "/kurikulum/{$id_kurikulum}/matakuliah/create}";
+        $this->view->action = "kurikulum/{$id_kurikulum}/matakuliah/create";
         $this->view->listRmk = $response->listRmk;
         return $this->view->pick('kurikulum/formmatakuliah');
     }
@@ -222,7 +225,7 @@ class KurikulumController extends Controller
             $response = $service->execute($request);
             $this->view->mataKuliah = $response->mataKuliah;
             $this->view->kurikulum_id = $response->kurikulumId;
-            $this->view->action = "/kurikulum/{$id_kurikulum}/matakuliah/edit/{$id_matakuliah}";
+            $this->view->action = "kurikulum/{$id_kurikulum}/matakuliah/edit/{$id_matakuliah}";
             return $this->view->pick('kurikulum/formmatakuliah');
         } catch (MataKuliahNotFoundException $e) {
             $this->flashSession->error($e->getMessage());
@@ -233,6 +236,32 @@ class KurikulumController extends Controller
 
     private function handleFormMataKuliahKurikulum()
     {
-
+        // TODO: MK validator
+        
+        $id = $this->request->getPost('id') ?: null;
+        $request = new KelolaMataKuliahKurikulumRequest(
+            $this->request->getPost('kurikulum_id'),
+            $this->request->getPost('mata_kuliah_id'),
+            $this->request->getPost('kode_rmk'),
+            $this->request->getPost('kode_mata_kuliah'),
+            $this->request->getPost('nama_indonesia'),
+            $this->request->getPost('nama_inggris'),
+            $this->request->getPost('deskripsi'),
+            $this->request->getPost('sks'),
+            $this->request->getPost('sifat'),
+            $this->request->getPost('semester')
+        );
+        $service = $this->kelolaMataKuliahKurikulumService;
+        try {
+            $service->execute($request);
+            $this->flashSession->success('Berhasil menyimpan kurikulum');
+        } catch (InvalidArgumentException $e) {
+            $this->flashSession->error($e->getMessage());
+        } catch (UnrecognizedSemesterException $e) {
+            $this->flashSession->error($e->getMessage());
+        } catch (Exception $e) {
+            $this->flashSession->error($e->getMessage());
+        }
+        return $this->view->pick('kurikulum/form');
     }
 }

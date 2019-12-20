@@ -426,7 +426,7 @@ class SqlKurikulumRepository implements KurikulumRepository
         }
         $type = $this->types[self::$saveMKKurikulum];
         $params = [
-            'id_mk' => $mataKuliah->getRmk()->id()->id(),
+            'id_mk' => $mataKuliah->getId()->id(),
             'id_kurikulum' => $kurikulumId->id(),
             'sifat' => $mataKuliah->getSifat()->sifat(),
             'sks' => $mataKuliah->getSks(),

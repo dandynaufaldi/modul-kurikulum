@@ -34,7 +34,7 @@ class KelolaMataKuliahKurikulumRequest
      */
     public function __construct(
         string $kurikulumId,
-        string $mataKuliahId,
+        string $mataKuliahId = NULL,
         string $kodeRMK,
         string $kodeMataKuliah,
         string $namaIndonesia,
