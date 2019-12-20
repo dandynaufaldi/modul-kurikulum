@@ -10,6 +10,7 @@ use Siakad\Kurikulum\Application\KelolaKurikulumRequest;
 use Siakad\Kurikulum\Application\KurikulumNotFoundException;
 use Siakad\Kurikulum\Application\LihatDaftarMataKuliahKurikulumRequest;
 use Siakad\Kurikulum\Application\LihatFormKurikulumRequest;
+use Siakad\Kurikulum\Application\MataKuliahNotFoundException;
 use Siakad\Kurikulum\Application\ProgramStudiNotFoundException;
 use Siakad\Kurikulum\Controllers\Validators\KurikulumValidator;
 use Siakad\Kurikulum\Domain\Model\UnrecognizedSemesterException;
@@ -22,6 +23,7 @@ class KurikulumController extends Controller
     private $hapusKurikulumService;
     private $daftarMataKuliahKurikulumService;
     private $daftarMataKuliahService;
+    private $hapusMataKuliahKurikulumService;
 
     public function initialize()
     {
@@ -31,6 +33,7 @@ class KurikulumController extends Controller
         $this->hapusKurikulumService = $this->di->get('hapus_kurikulum_service');
         $this->daftarMataKuliahKurikulumService = $this->di->get('daftar_mk_kurikulum_service');
         $this->daftarMataKuliahService = $this->di->get('daftar_mata_kuliah_service');
+        $this->hapusMataKuliahKurikulumService = $this->di->get('hapus_mata_kuliah_kurikulum_service');
     }
 
     public function indexAction()
@@ -169,5 +172,24 @@ class KurikulumController extends Controller
     public function createMataKuliahAction()
     {
         # TODO: controller untuk membuka form mata kuliah
+    }
+
+    public  function hapusMataKuliahKurikulumAction()
+    {
+        $kurikulumId = $this->request->getPost('kurikulum_id');
+        $mataKuliahId = $this->request->getPost('matakuliah_id');
+
+        $service = $this->hapusMataKuliahKurikulumService;
+
+        try {
+            $service->execute($kurikulumId, $mataKuliahId);
+            $this->flashSession->success('Berhasil menghapus matakuliah dari kurikulum');
+        } catch (KurikulumNotFoundException $e) {
+            $this->flashSession->error($e->getMessage());
+        } catch (MataKuliahNotFoundException $e) {
+            $this->flashSession->error($e->getMessage());
+        } catch (Exception $e) {
+            $this->flashSession->error('Internal server error');
+        }
     }
 }
