@@ -181,11 +181,12 @@ class Kurikulum
     public function kelolaMataKuliah(MataKuliah $mataKuliah)
     {
         $found = false;
-        foreach ($this->listMataKuliah as $existingMK) {
+        foreach ($this->listMataKuliah as $index => $existingMK) {
             if ($mataKuliah->getId()->isEqual($existingMK->getId())){
-                $existingMK->setSifat($mataKuliah->getSifat());
-                $existingMK->setSks($mataKuliah->getSks());
-                $existingMK->setStatus(MataKuliah::$ubah);
+                $this->listMataKuliah[$index]->setSifat($mataKuliah->getSifat());
+                $this->listMataKuliah[$index]->setSks($mataKuliah->getSks());
+                $this->listMataKuliah[$index]->setSemester($mataKuliah->getSemester());
+                $this->listMataKuliah[$index]->setStatus(MataKuliah::$ubah);
                 $found = true;
                 break;
             }
@@ -199,9 +200,9 @@ class Kurikulum
 
     public function hapusMataKuliah(MataKuliah $mataKuliah)
     {
-        foreach ($this->listMataKuliah as $existingMK) {
+        foreach ($this->listMataKuliah as $index => $existingMK) {
             if ($mataKuliah->getId()->isEqual($existingMK->getId())) {
-                $existingMK->setStatus(MataKuliah::$hapus);
+                $this->listMataKuliah[$index]->setStatus(MataKuliah::$hapus);
                 break;
             }
         }
