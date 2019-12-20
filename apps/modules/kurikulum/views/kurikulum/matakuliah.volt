@@ -19,7 +19,7 @@
             <a href="{{ url('kurikulum/')}}" class="btn btn-secondary btn-sm" role="button">Kembali</a>
         </div>
         <div class="col-md-2 pull-left">
-            <a href="{{ url('kurikulum/' ~ kurikulum.id ~'/matakuliah/add') }}" class="btn btn-success btn-sm" role="button">Tambah Mata Kuliah</a>
+            <a href="{{ url('/kurikulum/' ~ kurikulum.id ~'/matakuliah/create') }}" class="btn btn-success btn-sm" role="button">Tambah Mata Kuliah</a>
         </div>
     </div>
     <br>

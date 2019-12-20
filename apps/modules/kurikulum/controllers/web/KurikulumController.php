@@ -175,6 +175,19 @@ class KurikulumController extends Controller
     public function createMataKuliahAction()
     {
         # TODO: controller untuk membuka form mata kuliah
+        if ($this->request->isPost()) {
+            $this->handleFormMataKuliahKurikulum();
+        }
+
+        $id_kurikulum = $this->dispatcher->getParam('id_kurikulum');
+        $request = new LihatFormMataKuliahKurikulumRequest($id_kurikulum);
+        $service = $this->formMataKuliahKurikulumService;
+        $response = $service->execute($request);
+        $this->view->kurikulum_id = $response->kurikulumId;
+        $this->view->mataKuliah = $response->mataKuliah;
+        $this->view->action = "/kurikulum/{$id_kurikulum}/matakuliah/create}";
+        $this->view->listRmk = $response->listRmk;
+        return $this->view->pick('kurikulum/formmatakuliah');
     }
 
     public  function hapusMataKuliahKurikulumAction()
