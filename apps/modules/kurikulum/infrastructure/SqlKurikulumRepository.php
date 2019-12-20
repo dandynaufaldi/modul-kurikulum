@@ -31,6 +31,7 @@ class SqlKurikulumRepository implements KurikulumRepository
     private static $delete = 'delete';
     private static $fetchMataKuliah = 'fetchMataKuliah';
     private static $fetchMataKuliahById = 'fetchMataKuliahById';
+    private static $mataKuliahById = 'mataKuliahById';
     private static $insertMK = 'insertMK';
     private static $addMKKurikulum = 'addMKKurikulum';
     private static $saveMKKurikulum = 'saveMKKurikulum';
@@ -137,6 +138,27 @@ class SqlKurikulumRepository implements KurikulumRepository
             self::$fetchMataKuliahById => $this->db->prepare(
                 $queryMKKurikulumAll . ' AND mk_kurikulum.id_mk = :id_mk'
             ),
+            self::$mataKuliahById => $this->db->prepare(
+                'SELECT 
+                    mata_kuliah.id as mata_kuliah_id,
+                    mata_kuliah.kode_matkul as mata_kuliah_kode,
+                    mata_kuliah.nama as mata_kuliah_nama,
+                    mata_kuliah.nama_inggris as mata_kuliah_nama_inggris,
+                    mata_kuliah.deskripsi as mata_kuliah_deskripsi,
+                    rmk.id as rmk_id,
+                    rmk.kode_rmk as rmk_kode,
+                    rmk.nama as rmk_nama,
+                    rmk.nama_inggris as rmk_nama_inggris,
+                    user.id as user_id,
+                    user.nama AS user_nama,
+                    user.identifier AS user_identifier,
+                    user.level AS user_level
+                FROM mata_kuliah 
+                    JOIN rmk ON mata_kuliah.id_rmk = rmk.id
+                    JOIN user ON rmk.id_ketua = user.id
+                WHERE mata_kuliah.deleted_at IS NULL
+                    AND mata_kuliah.id = :id_mk'
+            ),
             self::$insertMK => $this->db->prepare(
                 'INSERT INTO mata_kuliah 
                 (id, id_rmk, kode_matkul, nama, nama_inggris, deskripsi) 
@@ -192,6 +214,9 @@ class SqlKurikulumRepository implements KurikulumRepository
             ],
             self::$fetchMataKuliahById => [
                 'id_kurikulum' => Column::BIND_PARAM_STR,
+                'id_mk' => Column::BIND_PARAM_STR
+            ],
+            self::$mataKuliahById => [
                 'id_mk' => Column::BIND_PARAM_STR
             ],
             self::$insertMK => [
@@ -252,6 +277,22 @@ class SqlKurikulumRepository implements KurikulumRepository
         $mataKuliah = $this->arrayToEntityMataKuliah($result->fetch(PDO::FETCH_ASSOC));
         return $mataKuliah;
     }
+
+    private function mataKuliahById(MataKuliahId $mataKuliahId) : ?MataKuliah
+    {
+        $statement = $this->statements[self::$mataKuliahById];
+        $type = $this->types[self::$mataKuliahById];
+        $params = [
+            'id_mk' => $mataKuliahId->id()
+        ];
+        $result = $this->db->executePrepared($statement, $params, $type);
+        
+        if ($result->rowCount() == 0) {
+            return null;
+        }
+        $mataKuliah = $this->arrayToEntityMataKuliah($result->fetch(PDO::FETCH_ASSOC));
+        return $mataKuliah;
+    }
     
     private function arrayToEntityMataKuliah(array $data) : MataKuliah
     {
@@ -275,9 +316,9 @@ class SqlKurikulumRepository implements KurikulumRepository
             $data['mata_kuliah_kode'],
             new NamaBilingual($data['mata_kuliah_nama'], $data['mata_kuliah_nama_inggris']),
             $data['mata_kuliah_deskripsi'],
-            $data['mk_kurikulum_sks'],
-            new SifatMataKuliah($data['mk_kurikulum_sifat']),
-            $data['mk_kurikulum_semester']
+            $data['mk_kurikulum_sks'] ?? 0,
+            isset($data['mk_kurikulum_sifat']) ? new SifatMataKuliah($data['mk_kurikulum_sifat']) : NULL,
+            $data['mk_kurikulum_semester'] ?? 0
         );
 
         return $mataKuliah;
@@ -359,7 +400,7 @@ class SqlKurikulumRepository implements KurikulumRepository
 
     private function saveMataKuliah(MataKuliah $mataKuliah, KurikulumId $kurikulumId) : void
     {
-        $exist = $this->fetchMataKuliahById($kurikulumId, $mataKuliah->getId());
+        $exist = $this->mataKuliahById($mataKuliah->getId());
         if (!$exist) {
             $statement = $this->statements[self::$insertMK];
             $type = $this->types[self::$insertMK];
@@ -387,7 +428,7 @@ class SqlKurikulumRepository implements KurikulumRepository
         $params = [
             'id_mk' => $mataKuliah->getRmk()->id()->id(),
             'id_kurikulum' => $kurikulumId->id(),
-            'sifat' => $mataKuliah->getSifat(),
+            'sifat' => $mataKuliah->getSifat()->sifat(),
             'sks' => $mataKuliah->getSks(),
             'semester' => $mataKuliah->getSemester()
         ];

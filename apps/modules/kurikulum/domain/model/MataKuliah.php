@@ -38,7 +38,7 @@ class MataKuliah
         $this->nama = $nama;
         $this->deskripsi = $deskripsi;
         $this->sks = $sks;
-        $this->sifat = $sifat;
+        $this->sifat = $sifat ?? new SifatMataKuliah('wajib');
         $this->status = $status;
         $this->semester = $semester;
     }
