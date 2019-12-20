@@ -16,7 +16,7 @@
     <br>
     {{ form(action, 'method': 'POST')}}
     <input type="hidden" class="form-control" id="kurikulum_id" name="kurikulum_id" value="{{ kurikulum_id }}">
-    <input type="hidden" class="form-control" id="mata_kuliah_id" name="matakuliah_id" {% if mataKuliah %}value="{{ mataKuliah.id }}"{% endif %}>
+    <input type="hidden" class="form-control" id="mata_kuliah_id" name="mata_kuliah_id" {% if mataKuliah %}value="{{ mataKuliah.id }}"{% endif %}>
     <div class="row">
         <div class="col-md-6">
             <div class='form-group'>

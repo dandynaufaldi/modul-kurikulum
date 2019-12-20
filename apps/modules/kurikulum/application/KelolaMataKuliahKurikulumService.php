@@ -4,6 +4,7 @@ namespace Siakad\Kurikulum\Application;
 
 use Siakad\Kurikulum\Domain\Model\KurikulumRepository;
 use Siakad\Kurikulum\Domain\Model\MataKuliah;
+use Siakad\Kurikulum\Domain\Model\MataKuliahId;
 use Siakad\Kurikulum\Domain\Model\NamaBilingual;
 use Siakad\Kurikulum\Domain\Model\RMKRepository;
 use Siakad\Kurikulum\Domain\Model\SifatMataKuliah;
@@ -38,7 +39,7 @@ class KelolaMataKuliahKurikulumService
 
         if(empty($mataKuliah)) {
             $mataKuliah = new MataKuliah(
-                $request->mataKuliahId,
+                new MataKuliahId(),
                 $rmk,
                 $request->kodeMataKuliah,
                 new NamaBilingual(
@@ -49,10 +50,14 @@ class KelolaMataKuliahKurikulumService
                 $request->sks,
                 new SifatMataKuliah(
                     $request->sifat
-                )
+                ),
+                $request->semester
             );
-        } else {
-            // TODO edit matkul?
+        }
+        else{
+            $mataKuliah->setSks($request->sks);
+            $mataKuliah->setSemester($request->semester);
+            $mataKuliah->setSifat(new SifatMataKuliah($request->sifat));
         }
 
         $kurikulum->kelolaMataKuliah($mataKuliah);

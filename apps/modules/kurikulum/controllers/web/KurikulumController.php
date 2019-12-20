@@ -238,7 +238,6 @@ class KurikulumController extends Controller
     {
         // TODO: MK validator
         
-        $id = $this->request->getPost('id') ?: null;
         $request = new KelolaMataKuliahKurikulumRequest(
             $this->request->getPost('kurikulum_id'),
             $this->request->getPost('mata_kuliah_id'),
