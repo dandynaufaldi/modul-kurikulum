@@ -8,18 +8,15 @@
 {% block content %}
     {{ flashSession.output() }}
     <div class="row">
-        <div class="col-md-12 pull-left"><h2>Daftar Mata Kuliah</h2></div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 pull-left"><h5>{{ kurikulum.namaIndonesia }}</h5></div>
+        <div class="col-md-12 pull-left"><h2>Penambahan Mata Kuliah</h2></div>
     </div>
     <hr>
     <div class="row">
         <div class="col-md-1 pull-left">
-            <a href="{{ url('kurikulum/')}}" class="btn btn-secondary btn-sm" role="button">Kembali</a>
+            <a href="{{ url('kurikulum/' ~ kurikulum_id ~ '/matakuliah')}}" class="btn btn-secondary btn-sm" role="button">Kembali</a>
         </div>
         <div class="col-md-2 pull-left">
-            <a href="{{ url('kurikulum/' ~ kurikulum.id ~'/matakuliah/add') }}" class="btn btn-success btn-sm" role="button">Tambah Mata Kuliah</a>
+            <a href="{{ url('kurikulum/' ~ kurikulum_id ~ '/matakuliah/create') }}" class="btn btn-success btn-sm" role="button">Tambah Mata Kuliah Baru</a>
         </div>
     </div>
     <br>
@@ -30,30 +27,23 @@
                 <th>Nama Mata Kuliah</th>
                 <th>Kode RMK</th>
                 <th>Nama RMK</th>
-                <th>Semester</th>
-                <th>SKS</th>
                 <th>Deskripsi</th>
                 <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
-        {% for matakuliah in kurikulum.listMataKuliah %}
+        {% for matakuliah in listMataKuliah %}
         <tr>
             <td>{{ matakuliah.kode }}</td>
             <td>{{ matakuliah.namaIndonesia }}</td>
             <td>{{ matakuliah.rmk.kode }}</td>
             <td>{{ matakuliah.rmk.namaIndonesia }}</td>
-            <td>{{ matakuliah.semester }}</td>
-            <td>{{ matakuliah.sks }}</td>
             <td>{{ matakuliah.deskripsi }}</td>
             <td>
                 <div class="pull-left">
-                    <a href="{{ url('mata-kuliah/' ~ matakuliah.id ~'/edit') }}" class="btn btn-info btn-sm" role="button">Edit</a>
-                </div>
-                <div class="pull-right">
-                    {{ form('mata-kuliah/' ~ matakuliah.id ~ '/delete', 'method': 'POST', 'onsubmit' : "return confirm('Apakah yakin untuk menghapus " ~ matakuliah.namaIndonesia ~ "?')")}}
+                    {{ form('kurikulum/' ~ kurikulum_id ~ '/matakuliah/create', 'method': 'GET')}}
                         {{ hidden_field('id', 'value': matakuliah.id ) }}
-                        {{ submit_button('Hapus', 'type': 'button', 'class': 'btn btn-danger btn-sm') }}
+                        {{ submit_button('Tambahkan', 'type': 'button', 'class': 'btn btn-success btn-sm') }}
                     {{ end_form() }}
                 </div>
             </td>

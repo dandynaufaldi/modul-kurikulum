@@ -37,6 +37,20 @@ $router->add('/kurikulum/{id}/matakuliah', [
     'action' => 'mataKuliah'
 ]);
 
+$router->add('/kurikulum/{id}/matakuliah/add', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'kurikulum',
+    'action' => 'addMataKuliah'
+]);
+
+$router->add('/kurikulum/{id_kurikulum}/matakuliah/create', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'kurikulum',
+    'action' => 'createMataKuliah'
+]);
+
 $router->addGet('/rmk', [
     'namespace' => $namespace,
     'module' => 'kurikulum',

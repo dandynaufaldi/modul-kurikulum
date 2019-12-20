@@ -21,6 +21,7 @@ class KurikulumController extends Controller
     private $formKurikulumService;
     private $hapusKurikulumService;
     private $daftarMataKuliahKurikulumService;
+    private $daftarMataKuliahService;
 
     public function initialize()
     {
@@ -29,6 +30,7 @@ class KurikulumController extends Controller
         $this->formKurikulumService = $this->di->get('form_kurikulum_service');
         $this->hapusKurikulumService = $this->di->get('hapus_kurikulum_service');
         $this->daftarMataKuliahKurikulumService = $this->di->get('daftar_mk_kurikulum_service');
+        $this->daftarMataKuliahService = $this->di->get('daftar_mata_kuliah_service');
     }
 
     public function indexAction()
@@ -141,7 +143,7 @@ class KurikulumController extends Controller
         return $this->response->redirect('kurikulum');
     }
 
-    public function matakuliahAction()
+    public function mataKuliahAction()
     {
         $service = $this->daftarMataKuliahKurikulumService;
         $id = $this->dispatcher->getParam('id');
@@ -150,5 +152,22 @@ class KurikulumController extends Controller
         $response = $service->execute($request);
         $this->view->kurikulum = $response->kurikulum;
         return $this->view->pick('kurikulum/matakuliah');
+    }
+
+    public function addMatakuliahAction()
+    {
+        $service = $this->daftarMataKuliahService;        
+        $response = $service->execute();
+        $this->view->listMataKuliah = $response->listMataKuliah;
+
+        $kurikulum_id = $this->dispatcher->getParam('id');
+        $this->view->kurikulum_id = $kurikulum_id;
+
+        return $this->view->pick('kurikulum/addmatakuliah');
+    }
+
+    public function createMataKuliahAction()
+    {
+        # TODO: controller untuk membuka form mata kuliah
     }
 }

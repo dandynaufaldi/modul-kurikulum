@@ -26,9 +26,9 @@ class MataKuliah
         string $kode,
         NamaBilingual $nama,
         string $deskripsi,
-        int $sks,
-        SifatMataKuliah $sifat,
-        int $semester,
+        int $sks = 0,
+        SifatMataKuliah $sifat = NULL,
+        int $semester = 0,
         int $status = 0
     )
     {
