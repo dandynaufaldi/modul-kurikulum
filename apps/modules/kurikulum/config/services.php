@@ -3,6 +3,7 @@
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 use Siakad\Kurikulum\Application\HapusKurikulumService;
+use Siakad\Kurikulum\Application\HapusMataKuliahKurikulumService;
 use Siakad\Kurikulum\Application\HapusRMKService;
 use Siakad\Kurikulum\Application\HapusMataKuliahService;
 use Siakad\Kurikulum\Application\KelolaKurikulumService;
@@ -191,6 +192,16 @@ $di->set('kelola_mata_kuliah_service', function() use ($di) {
 $di->set('hapus_mata_kuliah_service', function() use ($di) {
     $mataKuliahRepository = $di->get('sql_mata_kuliah_repository');
     return new HapusMataKuliahService(
+        $mataKuliahRepository
+    );
+});
+
+$di->set('hapus_mata_kuliah_kurikulum_service', function() use ($di) {
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    $mataKuliahRepository = $di->get('sql_mata_kuliah_repository');
+
+    return new HapusMataKuliahKurikulumService(
+        $kurikulumRepository,
         $mataKuliahRepository
     );
 });
