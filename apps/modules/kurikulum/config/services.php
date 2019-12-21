@@ -3,15 +3,19 @@
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 use Siakad\Kurikulum\Application\HapusKurikulumService;
+use Siakad\Kurikulum\Application\HapusMataKuliahKurikulumService;
 use Siakad\Kurikulum\Application\HapusRMKService;
 use Siakad\Kurikulum\Application\HapusMataKuliahService;
 use Siakad\Kurikulum\Application\KelolaKurikulumService;
+use Siakad\Kurikulum\Application\KelolaMataKuliahKurikulumService;
 use Siakad\Kurikulum\Application\KelolaMataKuliahService;
 use Siakad\Kurikulum\Application\KelolaRMKService;
 use Siakad\Kurikulum\Application\LihatDaftarKurikulumService;
+use Siakad\Kurikulum\Application\LihatDaftarMataKuliahKurikulumService;
 use Siakad\Kurikulum\Application\LihatDaftarRMKService;
 use Siakad\Kurikulum\Application\LihatDaftarMataKuliahService;
 use Siakad\Kurikulum\Application\LihatFormKurikulumService;
+use Siakad\Kurikulum\Application\LihatFormMataKuliahKurikulumService;
 use Siakad\Kurikulum\Application\LihatFormMataKuliahService;
 use Siakad\Kurikulum\Application\LihatFormRMKService;
 use Siakad\Kurikulum\Infrastructure\SqlKurikulumRepository;
@@ -123,6 +127,13 @@ $di->set('hapus_kurikulum_service', function() use ($di) {
     );
 });
 
+$di->set('daftar_mk_kurikulum_service', function() use ($di) {
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    return new LihatDaftarMataKuliahKurikulumService(
+        $kurikulumRepository
+    );
+});
+
 $di->set('daftar_rmk_service', function() use ($di) {
     $rmkRepository = $di->get('sql_rmk_repository');
     return new LihatDaftarRMKService(
@@ -184,5 +195,35 @@ $di->set('hapus_mata_kuliah_service', function() use ($di) {
     $mataKuliahRepository = $di->get('sql_mata_kuliah_repository');
     return new HapusMataKuliahService(
         $mataKuliahRepository
+    );
+});
+
+$di->set('hapus_mata_kuliah_kurikulum_service', function() use ($di) {
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    $mataKuliahRepository = $di->get('sql_mata_kuliah_repository');
+
+    return new HapusMataKuliahKurikulumService(
+        $kurikulumRepository,
+        $mataKuliahRepository
+    );
+});
+
+$di->set('form_mata_kuliah_kurikulum_service', function() use ($di) {
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    $rmkRepository = $di->get('sql_rmk_repository');
+
+    return new LihatFormMataKuliahKurikulumService(
+        $kurikulumRepository,
+        $rmkRepository
+    );
+});
+
+$di->set('kelola_mata_kuliah_kurikulum_service', function() use ($di) {
+    $kurikulumRepository = $di->get('sql_kurikulum_repository');
+    $rmkRepository = $di->get('sql_rmk_repository');
+
+    return new KelolaMataKuliahKurikulumService(
+        $kurikulumRepository,
+        $rmkRepository
     );
 });

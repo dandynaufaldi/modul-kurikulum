@@ -16,6 +16,7 @@ class Kurikulum
     private $semesterNormal;
     private $periode;
     private $semesterMulai;
+    private $listMataKuliah;
 
     public function __construct(
         KurikulumId $id,
@@ -27,7 +28,8 @@ class Kurikulum
         int $semesterNormal,
         PeriodeTahun $periode,
         Semester $semesterMulai,
-        $aktif = false
+        $aktif = false,
+        array $listMataKuliah = array()
     )
     {
         if (!self::validateAktifPeriode($aktif, $periode)) {
@@ -43,6 +45,8 @@ class Kurikulum
         $this->periode = $periode;
         $this->semesterMulai = $semesterMulai;
         $this->aktif = $aktif;
+        $this->listMataKuliah = $listMataKuliah;
+        $this->hitungSksWajib();
     }
 
     public static function validateAktifPeriode(bool $aktif, PeriodeTahun $periode) : bool
@@ -169,5 +173,50 @@ class Kurikulum
         return $this;
     }
 
-    // public function
+    public function getListMataKuliah() : array
+    {
+        return $this->listMataKuliah;
+    }
+
+    public function kelolaMataKuliah(MataKuliah $mataKuliah)
+    {
+        $found = false;
+        foreach ($this->listMataKuliah as $index => $existingMK) {
+            if ($mataKuliah->getId()->isEqual($existingMK->getId())){
+                $this->listMataKuliah[$index]->setSifat($mataKuliah->getSifat());
+                $this->listMataKuliah[$index]->setSks($mataKuliah->getSks());
+                $this->listMataKuliah[$index]->setSemester($mataKuliah->getSemester());
+                $this->listMataKuliah[$index]->setStatus(MataKuliah::$ubah);
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            $mataKuliah->setStatus(MataKuliah::$baru);
+            $this->listMataKuliah[] = $mataKuliah;
+        }
+        $this->hitungSksWajib();
+    }
+
+    public function hapusMataKuliah(MataKuliah $mataKuliah)
+    {
+        foreach ($this->listMataKuliah as $index => $existingMK) {
+            if ($mataKuliah->getId()->isEqual($existingMK->getId())) {
+                $this->listMataKuliah[$index]->setStatus(MataKuliah::$hapus);
+                break;
+            }
+        }
+        $this->hitungSksWajib();
+    }
+
+    private function hitungSksWajib()
+    {
+        $total = 0;
+        foreach ($this->listMataKuliah as $mataKuliah) {
+            if ($mataKuliah->getSifat() == SifatMataKuliah::$wajib) {
+                $total += $mataKuliah->getSks();
+            }
+        }
+        $this->sksWajib = $total;
+    }
 }

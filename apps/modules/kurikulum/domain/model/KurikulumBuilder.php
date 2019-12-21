@@ -17,11 +17,13 @@ class KurikulumBuilder
     private $semesterNormal = NULL;
     private $periode = NULL;
     private $semesterMulai = NULL;
+    private $listMataKuliah = NULL;
 
     public function __construct()
     {
         $this->aktif = false;
         $this->id = new KurikulumId();
+        $this->listMataKuliah = array();
     }
 
     public function id(KurikulumId $id)
@@ -84,6 +86,12 @@ class KurikulumBuilder
         return $this;
     }
 
+    public function listMataKuliah(array $listMataKuliah) : self
+    {
+        $this->listMataKuliah = $listMataKuliah;
+        return $this;
+    }
+
     public function build() : Kurikulum
     {
        try {
@@ -97,7 +105,8 @@ class KurikulumBuilder
                 $this->semesterNormal,
                 $this->periode,
                 $this->semesterMulai,
-                $this->aktif
+                $this->aktif,
+                $this->listMataKuliah
             );
             return $kurikulum;
        } catch (TypeError $e) {

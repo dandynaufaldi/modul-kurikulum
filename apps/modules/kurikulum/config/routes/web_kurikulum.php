@@ -30,6 +30,41 @@ $router->addPost('/kurikulum/{id}/delete', [
     'action' => 'delete'
 ]);
 
+$router->add('/kurikulum/{id}/matakuliah', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'kurikulum',
+    'action' => 'mataKuliah'
+]);
+
+$router->add('/kurikulum/{id}/matakuliah/add', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'kurikulum',
+    'action' => 'addMataKuliah'
+]);
+
+$router->add('/kurikulum/{id_kurikulum}/matakuliah/create', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'kurikulum',
+    'action' => 'createMataKuliah'
+]);
+
+$router->add('/kurikulum/{id}/matakuliah/edit/{id_mk}', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'kurikulum',
+    'action' => 'editMataKuliah'
+]);
+
+$router->addPost('/kurikulum/{id}/matakuliah/delete/{id_mk}', [
+    'namespace' => $namespace,
+    'module' => 'kurikulum',
+    'controller' => 'kurikulum',
+    'action' => 'hapusMataKuliahKurikulum'
+]);
+
 $router->addGet('/rmk', [
     'namespace' => $namespace,
     'module' => 'kurikulum',
